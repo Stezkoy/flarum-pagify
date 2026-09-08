@@ -151,16 +151,20 @@ export default class Pager extends Component {
 
   scrollToTop() {
     // Scroll to the top of the list the pager belongs to — the first item must
-    // be visible after a page change. The list wrapper is found from the pager
-    // element itself, so this works on any page layout (v2 nests pages inside
-    // PageStructure, where page-level containers are unreliable targets).
-    const list = this.element.closest(this.attrs.scrollSelector || '.DiscussionList');
-    const header = document.getElementById('header');
-    const offsetY = header ? header.clientHeight : 0;
+    // be visible after a page change. Resolved from the live DOM at scroll
+    // time: mid-request the list swaps to a loading state and this pager
+    // instance is unmounted, so this.element is detached by then and
+    // closest() would measure zeros.
+    setTimeout(() => {
+      const list = document.querySelector(this.attrs.scrollSelector || '.DiscussionList')
+        || document.querySelector('.Page-content');
+      const header = document.getElementById('header');
+      const offsetY = header ? header.clientHeight : 0;
 
-    if (list) {
-      const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY;
-      setTimeout(() => window.scrollTo({ top: targetPosition, behavior: 'smooth' }), 50);
-    }
+      if (list) {
+        const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+      }
+    }, 50);
   }
 }
