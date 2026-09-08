@@ -30,7 +30,7 @@
             "category": "feature",
             "icon": {
                 "name": "fas fa-list-ol",
-                "backgroundColor": "#3b82f6",
+                "backgroundColor": "#00a185",
                 "color": "#fff"
             }
         }

@@ -146,7 +146,7 @@ export default class Pager extends Component {
       const offsetY = header ? header.clientHeight : 0;
 
       if (list) {
-        const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY;
+        const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY - 100;
         window.scrollTo({ top: targetPosition, behavior: 'smooth' });
       }
     }, 50);
