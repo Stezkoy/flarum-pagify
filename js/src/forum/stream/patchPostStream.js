@@ -1,19 +1,22 @@
 import { extend, override } from 'flarum/common/extend';
-import PostStream from 'flarum/forum/components/PostStream';
 
 import goToPage from './goToPage';
 import PostPaginator from './PostPaginator';
 import { postsPerPage, streamEnabled, streamPosition } from './config';
 
+const POST_STREAM = 'flarum/forum/components/PostStream';
+
 /**
  * Apply pagination behaviour directly on the core PostStream prototype.
  *
- * ai_gen-core's DiscussionPage renders `<this.PostStream/>` inside a
- * PageStructure (there is no `mainContent` hook to swap the component), so we
- * patch the three methods that define the infinite-scroll behaviour on the
- * prototype instead — the approach flarum/realtime uses. All the rest of the
- * scroll lifecycle (ScrollListener, triggerScroll, scrollToItem, onscroll,
- * position tracking, read state) stays intact.
+ * The core loads PostStream lazily (a separate webpack chunk), so a static
+ * `import PostStream from 'flarum/forum/components/PostStream'` would be
+ * `undefined` at boot. Passing the module string to `override`/`extend` instead
+ * registers the patches through `flarum.reg.onLoad`: they are applied to the
+ * class as soon as the PostStream chunk is loaded, before any instance is
+ * created (the chunk completes before DiscussionPage's `.then()` renders it).
+ *
+ * The three patched methods define the infinite-scroll behaviour:
  *
  * - loadPostsIfNeeded -> no-op: scrolling never auto-loads an adjacent page.
  * - view -> strip the "Load more" item and render the pager above/under.
@@ -21,16 +24,18 @@ import { postsPerPage, streamEnabled, streamPosition } from './config';
  *   wider window around the deep-linked post, which would otherwise bleed the
  *   next page's posts onto this one).
  *
- * Every override falls back to the original when the feature is disabled.
+ * All the rest of the scroll lifecycle (ScrollListener, triggerScroll,
+ * scrollToItem, onscroll, position tracking, read state) stays intact. Every
+ * patch falls back to the original when the feature is disabled.
  */
 export default function patchPostStream() {
-  override(PostStream.prototype, 'loadPostsIfNeeded', function (original, ...args) {
-    if (!streamEnabled()) return original.apply(this, args);
+  override(POST_STREAM, 'loadPostsIfNeeded', function (original, ...args) {
+    if (!streamEnabled()) return original(...args);
 
     // no-op — pagination replaces infinite scroll.
   });
 
-  override(PostStream.prototype, 'view', function (original, vnode) {
+  override(POST_STREAM, 'view', function (original, vnode) {
     const vdom = original(vnode);
     if (!streamEnabled() || !vdom || !Array.isArray(vdom.children)) return vdom;
 
@@ -60,7 +65,7 @@ export default function patchPostStream() {
     return vdom;
   });
 
-  extend(PostStream.prototype, 'oncreate', function (vnode) {
+  extend(POST_STREAM, 'oncreate', function (_value, vnode) {
     if (!streamEnabled() || this._pagifySnapped) return;
     this._pagifySnapped = true;
 

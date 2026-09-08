@@ -1,6 +1,5 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import DiscussionComposer from 'flarum/forum/components/DiscussionComposer';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 
 import overrideDiscussionList from './list/overrideDiscussionList';
@@ -19,8 +18,9 @@ app.initializers.add('stezkoy-pagify', () => {
     }
   });
 
-  // After a discussion is created, refresh the list (page 1).
-  extend(DiscussionComposer.prototype, 'onsubmit', function () {
+  // After a discussion is created, refresh the list (page 1). DiscussionComposer
+  // is a lazy-loaded chunk, so we pass the module path instead of importing it.
+  extend('flarum/forum/components/DiscussionComposer', 'onsubmit', function () {
     if (!app.forum.attribute('stezkoyPagify.enableDiscussionList')) return;
     if (app.discussions) {
       app.discussions.refresh();
