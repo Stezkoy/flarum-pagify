@@ -4,18 +4,6 @@ import Component from 'flarum/common/Component';
 
 const PREFIX = 'stezkoy-pagify';
 
-/**
- * The numbered pager, shared by every paginated list surface (discussion list,
- * post lists). Driven by the core v2 PaginatedListState
- * (totalItems / pageSize / goto). Page clicks swap the loaded page via
- * state.goto(), like the stock "Load more" would have.
- *
- * attrs:
- * - state: PaginatedListState
- * - perPage: () => number — fallback page size while the state carries none
- * - scrollSelector: selector of the list wrapper to scroll back to after a
- *   page change (resolved from the pager element via closest()).
- */
 export default class Pager extends Component {
   view() {
     const state = this.attrs.state;
@@ -150,11 +138,7 @@ export default class Pager extends Component {
   }
 
   scrollToTop() {
-    // Scroll to the top of the list the pager belongs to — the first item must
-    // be visible after a page change. Resolved from the live DOM at scroll
-    // time: mid-request the list swaps to a loading state and this pager
-    // instance is unmounted, so this.element is detached by then and
-    // closest() would measure zeros.
+    // This pager instance unmounts mid-request — resolve the list from the live DOM.
     setTimeout(() => {
       const list = document.querySelector(this.attrs.scrollSelector || '.DiscussionList')
         || document.querySelector('.Page-content');

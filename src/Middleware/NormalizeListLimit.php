@@ -9,17 +9,9 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 
 /**
- * Give the discussion list a page size of the configured perPage.
- *
- * Flarum v2 preloads the list with page[number] (no page[limit], see
- * Forum\Content\Index), and the frontend only sends page[limit] once it knows
- * the page size from the response meta. Injecting page[limit] when it is absent
- * makes both the preloaded first page and the first frontend request use the
- * configured perPage; explicit client limits pass through untouched.
- *
- * perPage is an independent setting: it applies whether the page pagination
- * (numbered pager) or the core "Load more" behaviour is active, so a custom
- * value must not depend on the enableDiscussionList toggle.
+ * Inject page[limit] = perPage into /discussions requests that carry none,
+ * so the preloaded first page matches the configured list page size.
+ * perPage applies whether the pager or the "Load more" behaviour is active.
  */
 class NormalizeListLimit implements MiddlewareInterface
 {

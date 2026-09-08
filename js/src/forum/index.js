@@ -11,7 +11,6 @@ app.initializers.add('stezkoy-pagify', () => {
   overrideDiscussionPage();
   overridePostList();
 
-  // After a discussion is deleted, re-fetch the current page in place.
   extend(DiscussionControls, 'deleteAction', function () {
     if (!app.forum.attribute('stezkoyPagify.enableDiscussionList')) return;
     if (app.discussions) {
@@ -20,8 +19,6 @@ app.initializers.add('stezkoy-pagify', () => {
     }
   });
 
-  // After a discussion is created, refresh the list (page 1). DiscussionComposer
-  // is a lazy-loaded chunk, so we pass the module path instead of importing it.
   extend('flarum/forum/components/DiscussionComposer', 'onsubmit', function () {
     if (!app.forum.attribute('stezkoyPagify.enableDiscussionList')) return;
     if (app.discussions) {

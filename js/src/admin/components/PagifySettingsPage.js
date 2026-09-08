@@ -44,8 +44,6 @@ export default class PagifySettingsPage extends ExtensionPage {
         'admin.settings.enablePostStream',
         'admin.settings.enablePostStream-Help'
       ),
-      // Always available — it only matters when the toggle is on, but there is
-      // no reason to freeze it.
       this._positionField(PREFIX + '.postStreamPosition', 'admin.settings.postStreamPosition'),
       m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.postsPerPage')),
@@ -104,8 +102,7 @@ export default class PagifySettingsPage extends ExtensionPage {
     ]);
   }
 
-  // Toggle switches store '1', but the backend defaults (Extend\Settings->default)
-  // arrive as booleans until the settings are saved once — accept both.
+  // Defaults arrive as booleans until saved once.
   _flagOn(key) {
     const value = this.setting(key, '')();
     return value === '1' || value === true || value === 1;

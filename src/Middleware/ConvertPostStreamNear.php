@@ -9,18 +9,10 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 
 /**
- * Align the server-side preloaded post window with the configured postsPerPage.
- *
- * Flarum v2 preloads the post stream through the LIST endpoint /posts with
- * filter[discussion] and a page[near]=<post number>, page[offset] and
- * page[limit] computed for the hard-coded 20-post window (see
- * Forum\Content\Discussion). This middleware rewrites that request so the
- * preloaded window is exactly one postsPerPage-sized page containing the
- * anchored post. `near` keeps its native "post number" meaning, so the frontend
- * (PostStreamState + the paginated stream's oncreate snap) works unchanged.
- *
- * The client's own runtime navigation (loadNearNumber) sends page[near]
- * WITHOUT page[limit], so it never matches here and is never touched.
+ * Realign the preloaded /posts window (filter[discussion] + page[near/limit])
+ * to one postsPerPage-sized page containing the anchored post, keeping the
+ * native "post number" meaning of near. Applies only with post pagination on;
+ * runtime loadNearNumber requests carry no page[limit] and are never touched.
  */
 class ConvertPostStreamNear implements MiddlewareInterface
 {
