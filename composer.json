@@ -2,6 +2,11 @@
     "name": "stezkoy/flarum-pagify",
     "description": "Page-number pagination for the discussion list and post stream in Flarum.",
     "keywords": ["flarum", "extension", "pagination", "discussion", "posts"],
+    "support": {
+        "source": "https://github.com/Stezkoy/flarum-pagify",
+        "issues": "https://github.com/Stezkoy/flarum-pagify/issues",
+        "forum": "https://discuss.flarum.org/d/39822-pagify-pagination-for-the-forum"
+    },
     "type": "flarum-extension",
     "license": "MIT",
     "authors": [
