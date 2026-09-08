@@ -12,7 +12,7 @@ stezkoy-pagify:
       enablePostStream: Paginate posts inside a discussion
       enablePostStream-Help: Replace infinite scrolling with numbered pages inside each discussion.
       postsPerPage: Posts per page
-      postsPerPage-Help: How many posts to show per page. Also controls the page size when pagination is off ("Load more" batches).
+      postsPerPage-Help: How many posts to show on each page. Applies only when "Paginate posts inside a discussion" is enabled.
       postStreamPosition: Post pager position
 
       position:

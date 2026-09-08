@@ -21,10 +21,6 @@ use Psr\Http\Server\RequestHandlerInterface as Handler;
  *
  * The client's own runtime navigation (loadNearNumber) sends page[near]
  * WITHOUT page[limit], so it never matches here and is never touched.
- *
- * postsPerPage is an independent setting: the aligned preload window applies
- * whether the paginated stream or the core infinite-scroll/"Load more"
- * behaviour is active, so it must not depend on the enablePostStream toggle.
  */
 class ConvertPostStreamNear implements MiddlewareInterface
 {
@@ -35,6 +31,7 @@ class ConvertPostStreamNear implements MiddlewareInterface
     public function process(Request $request, Handler $handler): Response
     {
         if ($request->getMethod() === 'GET'
+            && $this->settings->get('stezkoy-pagify.enablePostStream')
             && preg_match('#/posts/?$#', $request->getUri()->getPath())
         ) {
             $params = $request->getQueryParams();

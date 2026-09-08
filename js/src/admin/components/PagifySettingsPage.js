@@ -21,6 +21,7 @@ export default class PagifySettingsPage extends ExtensionPage {
         'admin.settings.enableDiscussionList',
         'admin.settings.enableDiscussionList-Help'
       ),
+      this._positionField(PREFIX + '.paginationPosition', 'admin.settings.paginationPosition'),
       m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.perPage')),
         m('input.FormControl', {
@@ -31,35 +32,37 @@ export default class PagifySettingsPage extends ExtensionPage {
         }),
         m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.perPage-Help')),
       ]),
-      this._positionField(PREFIX + '.paginationPosition', 'admin.settings.paginationPosition'),
     ]);
   }
 
   _postStreamSection() {
+    const streamEnabled = this.setting(PREFIX + '.enablePostStream', '')() === '1';
     return this._section('admin.settings.post_stream_heading', [
       this._toggle(
         PREFIX + '.enablePostStream',
         'admin.settings.enablePostStream',
         'admin.settings.enablePostStream-Help'
       ),
+      this._positionField(PREFIX + '.postStreamPosition', 'admin.settings.postStreamPosition', streamEnabled),
       m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.postsPerPage')),
         m('input.FormControl', {
           type: 'number',
           min: 1,
           max: 50,
+          disabled: !streamEnabled,
           bidi: this.setting(PREFIX + '.postsPerPage'),
         }),
         m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.postsPerPage-Help')),
       ]),
-      this._positionField(PREFIX + '.postStreamPosition', 'admin.settings.postStreamPosition'),
     ]);
   }
 
-  _positionField(key, labelKey) {
+  _positionField(key, labelKey, disabled = false) {
     return m('.Form-group', [
       m('label', app.translator.trans(PREFIX + '.' + labelKey)),
       m('select.FormControl', {
+        disabled,
         value: this.setting(key)(),
         onchange: (e) => this.setting(key)(e.target.value),
       }, [

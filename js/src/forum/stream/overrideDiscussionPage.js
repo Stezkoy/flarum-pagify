@@ -23,10 +23,13 @@ export default function overrideDiscussionPage() {
   // the stream, so the initial deep-link load fetches one page instead of the
   // default 20-post window. Safe here (app.forum exists at oninit) — unlike the
   // app initializer body, which runs before forum data is attached.
-  // postsPerPage is independent of the pagination toggle: it also governs each
-  // "Load more"/scroll batch when enablePostStream is off.
+  // postsPerPage only applies when the post-stream pagination is enabled:
+  // without the toggle, posts auto-load (infinite scroll/"Load more") and the
+  // window is left at core's default.
   override(DiscussionPage.prototype, 'oninit', function (original, vnode) {
-    PostStreamState.loadCount = postsPerPage();
+    if (streamEnabled()) {
+      PostStreamState.loadCount = postsPerPage();
+    }
     return original(vnode);
   });
 
