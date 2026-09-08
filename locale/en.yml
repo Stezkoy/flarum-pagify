@@ -5,14 +5,14 @@ stezkoy-pagify:
       enableDiscussionList: Paginate the discussion list
       enableDiscussionList-Help: Replace the "Load More" button with numbered page pagination on the index page.
       perPage: Discussions per page
-      perPage-Help: How many discussions to show on each page.
+      perPage-Help: How many discussions to show per page. Also controls the page size when pagination is off ("Load more" batches).
       paginationPosition: Pager position
 
       post_stream_heading: Post Stream
       enablePostStream: Paginate posts inside a discussion
       enablePostStream-Help: Replace infinite scrolling with numbered pages inside each discussion.
       postsPerPage: Posts per page
-      postsPerPage-Help: How many posts to show on each page inside a discussion.
+      postsPerPage-Help: How many posts to show per page. Also controls the page size when pagination is off ("Load more" batches).
       postStreamPosition: Post pager position
 
       position:

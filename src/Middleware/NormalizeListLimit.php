@@ -16,6 +16,10 @@ use Psr\Http\Server\RequestHandlerInterface as Handler;
  * the page size from the response meta. Injecting page[limit] when it is absent
  * makes both the preloaded first page and the first frontend request use the
  * configured perPage; explicit client limits pass through untouched.
+ *
+ * perPage is an independent setting: it applies whether the page pagination
+ * (numbered pager) or the core "Load more" behaviour is active, so a custom
+ * value must not depend on the enableDiscussionList toggle.
  */
 class NormalizeListLimit implements MiddlewareInterface
 {
@@ -26,7 +30,6 @@ class NormalizeListLimit implements MiddlewareInterface
     public function process(Request $request, Handler $handler): Response
     {
         if ($request->getMethod() === 'GET'
-            && $this->settings->get('stezkoy-pagify.enableDiscussionList')
             && preg_match('#/discussions/?$#', $request->getUri()->getPath())
         ) {
             $perPage = (int) ($this->settings->get('stezkoy-pagify.perPage') ?: 20);

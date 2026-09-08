@@ -29,11 +29,11 @@ import { listEnabled, perPage, position } from './config';
  */
 export default function overrideDiscussionList() {
   // Force the configured perPage onto the list state so that every live
-  // request, and the pager's page math, agree with what the middleware trims
-  // the server-side preload (page 1) to.
+  // request, the pager's page math, and (in "Load more" mode) each batch the
+  // stock DiscussionList fetches agree with what the middleware trims the
+  // server-side preload (page 1) to. perPage is independent of the
+  // enableDiscussionList toggle.
   override(DiscussionListState.prototype, 'loadPage', function (original, page) {
-    if (!listEnabled()) return original(page);
-
     const preloaded = app.preloadedApiDocument();
     if (preloaded) {
       this.initialLoading = false;
