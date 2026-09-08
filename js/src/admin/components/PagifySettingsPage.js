@@ -75,7 +75,7 @@ export default class PagifySettingsPage extends ExtensionPage {
 
   _section(titleKey, children) {
     return m('.PagifySettings-section', [
-      m('.PagifySettings-sectionHeader', m('h3', app.translator.trans(PREFIX + '.' + titleKey))),
+      m('h3', app.translator.trans(PREFIX + '.' + titleKey)),
       m('.PagifySettings-sectionBody', children),
     ]);
   }
