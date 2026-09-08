@@ -2,20 +2,25 @@ import app from 'flarum/forum/app';
 import Button from 'flarum/common/components/Button';
 import Component from 'flarum/common/Component';
 
-import { perPage } from './config';
-
 const PREFIX = 'stezkoy-pagify';
 
 /**
- * The numbered pager for the discussion list, driven by the core v2
- * PaginatedListState (totalItems / pageSize / goto). Page clicks swap the
- * loaded page via state.goto(), like the stock "Load more" would have.
+ * The numbered pager, shared by every paginated list surface (discussion list,
+ * post lists). Driven by the core v2 PaginatedListState
+ * (totalItems / pageSize / goto). Page clicks swap the loaded page via
+ * state.goto(), like the stock "Load more" would have.
+ *
+ * attrs:
+ * - state: PaginatedListState
+ * - perPage: () => number — fallback page size while the state carries none
+ * - scrollSelector: selector of the list wrapper to scroll back to after a
+ *   page change (resolved from the pager element via closest()).
  */
-export default class DiscussionListPager extends Component {
+export default class Pager extends Component {
   view() {
     const state = this.attrs.state;
 
-    const pageSize = state.pageSize || perPage();
+    const pageSize = state.pageSize || this.fallbackPerPage();
     const total = state.totalItems ?? this.payloadTotal(state) ?? 0;
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const current = Math.min(totalPages, state.getLocation().page || 1);
@@ -103,6 +108,10 @@ export default class DiscussionListPager extends Component {
     );
   }
 
+  fallbackPerPage() {
+    return typeof this.attrs.perPage === 'function' ? this.attrs.perPage() : 20;
+  }
+
   payloadTotal(state) {
     const firstPage = state.getPages()[0];
     const meta = firstPage && firstPage.items && firstPage.items.payload ? firstPage.items.payload.meta : null;
@@ -123,7 +132,7 @@ export default class DiscussionListPager extends Component {
   }
 
   goto(state, page) {
-    const pageSize = state.pageSize || perPage();
+    const pageSize = state.pageSize || this.fallbackPerPage();
     const total = state.totalItems ?? this.payloadTotal(state) ?? 0;
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const target = Math.min(Math.max(1, page), totalPages);
@@ -141,12 +150,16 @@ export default class DiscussionListPager extends Component {
   }
 
   scrollToTop() {
-    const container = document.querySelector('#content > .IndexPage > .container');
+    // Scroll to the top of the list the pager belongs to — the first item must
+    // be visible after a page change. The list wrapper is found from the pager
+    // element itself, so this works on any page layout (v2 nests pages inside
+    // PageStructure, where page-level containers are unreliable targets).
+    const list = this.element.closest(this.attrs.scrollSelector || '.DiscussionList');
     const header = document.getElementById('header');
     const offsetY = header ? header.clientHeight : 0;
 
-    if (container) {
-      const targetPosition = container.getBoundingClientRect().top + window.scrollY - offsetY;
+    if (list) {
+      const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY;
       setTimeout(() => window.scrollTo({ top: targetPosition, behavior: 'smooth' }), 50);
     }
   }

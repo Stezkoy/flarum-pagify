@@ -15,6 +15,13 @@ stezkoy-pagify:
       postsPerPage-Help: Сколько постов показывать на странице. Применяется только при включённой «Пагинации постов внутри темы».
       postStreamPosition: Позиция пагинации постов
 
+      post_list_heading: Список постов
+      enablePostList: Пагинация списка постов
+      enablePostList-Help: Заменить кнопку «Показать ещё» на нумерованные страницы в ленте активности пользователя и на странице постов.
+      postListPerPage: Постов на страницу
+      postListPerPage-Help: Сколько постов показывать на странице списка постов.
+      postListPosition: Позиция пагинации
+
       position:
         above: Сверху
         under: Снизу

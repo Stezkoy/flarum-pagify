@@ -4,10 +4,12 @@ import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 
 import overrideDiscussionList from './list/overrideDiscussionList';
 import overrideDiscussionPage from './stream/overrideDiscussionPage';
+import overridePostList from './posts/overridePostList';
 
 app.initializers.add('stezkoy-pagify', () => {
   overrideDiscussionList();
   overrideDiscussionPage();
+  overridePostList();
 
   // After a discussion is deleted, re-fetch the current page in place.
   extend(DiscussionControls, 'deleteAction', function () {

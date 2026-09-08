@@ -9,6 +9,7 @@ export default class PagifySettingsPage extends ExtensionPage {
       m('.PagifySettings', [
         this._discussionListSection(),
         this._postStreamSection(),
+        this._postListSection(),
         m('.Form-group.Form-controls', this.submitButton()),
       ]),
     ]));
@@ -54,6 +55,27 @@ export default class PagifySettingsPage extends ExtensionPage {
           bidi: this.setting(PREFIX + '.postsPerPage'),
         }),
         m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.postsPerPage-Help')),
+      ]),
+    ]);
+  }
+
+  _postListSection() {
+    return this._section('admin.settings.post_list_heading', [
+      this._toggle(
+        PREFIX + '.enablePostList',
+        'admin.settings.enablePostList',
+        'admin.settings.enablePostList-Help'
+      ),
+      this._positionField(PREFIX + '.postListPosition', 'admin.settings.postListPosition'),
+      m('.Form-group', [
+        m('label', app.translator.trans(PREFIX + '.admin.settings.postListPerPage')),
+        m('input.FormControl', {
+          type: 'number',
+          min: 1,
+          max: 50,
+          bidi: this.setting(PREFIX + '.postListPerPage'),
+        }),
+        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.postListPerPage-Help')),
       ]),
     ]);
   }
