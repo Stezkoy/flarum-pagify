@@ -21,6 +21,18 @@
     margin-top: 4px;
   }
 
+  // Page-number buttons: keep the active page the same width as its
+  // neighbours (core .Button--primary pads 20px vs the default 13px).
+  .Button:not(.Button--icon) {
+    min-width: 36px;
+    text-align: center;
+  }
+
+  .Button.Button--primary {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+
   &-jump {
     margin-left: 8px;
 
@@ -33,10 +45,34 @@
       vertical-align: middle;
       font-weight: bold;
       outline: none;
-      border: 0;
+      border: 1px solid transparent;
       border-radius: var(--border-radius);
       width: 48px;
       height: 36px;
+
+      // The field uses the same background as the pager buttons and has no
+      // border, so it is invisible until hover/focus. Show a border while
+      // typing (any digit present) and on focus.
+      &:hover {
+        border-color: var(--muted-color);
+      }
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        border-color: var(--primary-color);
+      }
+
+      // Hide the native number-input spinners: typing is manual only.
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      &[type='number'] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
     }
   }
 }

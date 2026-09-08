@@ -75,9 +75,10 @@ export default class DiscussionListPager extends Component {
           <li className="PagifyPager-jump">
             <input
               className="FormControl"
-              type="number"
-              min={1}
-              max={totalPages}
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxLength={String(totalPages).length + 1}
               placeholder={String(current)}
               aria-label={app.translator.trans(PREFIX + '.forum.list.jump')}
               title={app.translator.trans(PREFIX + '.forum.list.jump')}
@@ -92,7 +93,7 @@ export default class DiscussionListPager extends Component {
           <li>
             <Button
               title={app.translator.trans(PREFIX + '.forum.list.jump')}
-              icon="fas fa-paper-plane"
+              icon="fas fa-arrow-right"
               className="Button Button--icon"
               onclick={() => this.jump(state, this.element.querySelector('input')?.value)}
             />
