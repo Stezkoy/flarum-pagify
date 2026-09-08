@@ -1,0 +1,35 @@
+stezkoy-pagify:
+  admin:
+    settings:
+      discussion_list_heading: Список тем
+      enableDiscussionList: Пагинация списка тем
+      enableDiscussionList-Help: Заменить кнопку Показать ещё» на нумерованные страницы на главной.
+      perPage: Тем на страницу
+      perPage-Help: Сколько тем показывать на каждой странице.
+      paginationPosition: Позиция пагинации
+
+      post_stream_heading: Поток постов
+      enablePostStream: Пагинация постов внутри темы
+      enablePostStream-Help: Заменить бесконечную прокрутку на нумерованные страницы внутри темы.
+      postsPerPage: Постов на страницу
+      postsPerPage-Help: Сколько постов показывать на каждой странице внутри темы.
+      postStreamPosition: Позиция пагинации постов
+
+      position:
+        above: Сверху
+        under: Снизу
+        both: Сверху и снизу
+
+  forum:
+    list:
+      first: Первая страница
+      previous: Предыдущая страница
+      next: Следующая страница
+      last: Последняя страница
+      jump: Перейти к странице
+    post_stream:
+      aria_label: Страницы постов
+      first: Первая страница
+      previous: Предыдущая страница
+      next: Следующая страница
+      last: Последняя страница

@@ -1,0 +1,17 @@
+{
+    "extends": "flarum-tsconfig",
+    "compilerOptions": {
+        "noEmit": true,
+        "module": "esnext",
+        "target": "es2019",
+        "moduleResolution": "node",
+        "lib": ["es2019", "dom"],
+        "jsx": "react",
+        "jsxFactory": "jsx",
+        "jsxFragmentFactory": "Fragment",
+        "allowJs": true,
+        "checkJs": true,
+        "strict": false
+    },
+    "include": ["src/**/*"]
+}
