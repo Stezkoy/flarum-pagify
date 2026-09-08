@@ -15,11 +15,11 @@ stezkoy-pagify:
       postsPerPage-Help: How many posts to show on each page. Applies only when "Paginate posts inside a discussion" is enabled.
       postStreamPosition: Post pager position
 
-      post_list_heading: Post List
-      enablePostList: Paginate post lists
-      enablePostList-Help: Replace the "Load More" button with numbered pages in the user profile activity feed and on the posts page.
+      post_list_heading: User Post Feed
+      enablePostList: Paginate the user post feed
+      enablePostList-Help: Replace the "Load More" button with numbered pages on the user activity feed and the posts page.
       postListPerPage: Posts per page
-      postListPerPage-Help: How many posts to show on each page of a post list.
+      postListPerPage-Help: How many posts to show on each page of the feed. Works with pagination off too — it sizes each "Load more" batch.
       postListPosition: Pager position
 
       position:

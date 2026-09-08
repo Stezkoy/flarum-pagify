@@ -37,14 +37,16 @@ export default class PagifySettingsPage extends ExtensionPage {
   }
 
   _postStreamSection() {
-    const streamEnabled = this.setting(PREFIX + '.enablePostStream', '')() === '1';
+    const streamEnabled = this._flagOn(PREFIX + '.enablePostStream');
     return this._section('admin.settings.post_stream_heading', [
       this._toggle(
         PREFIX + '.enablePostStream',
         'admin.settings.enablePostStream',
         'admin.settings.enablePostStream-Help'
       ),
-      this._positionField(PREFIX + '.postStreamPosition', 'admin.settings.postStreamPosition', streamEnabled),
+      // Always available — it only matters when the toggle is on, but there is
+      // no reason to freeze it.
+      this._positionField(PREFIX + '.postStreamPosition', 'admin.settings.postStreamPosition'),
       m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.postsPerPage')),
         m('input.FormControl', {
@@ -102,12 +104,19 @@ export default class PagifySettingsPage extends ExtensionPage {
     ]);
   }
 
+  // Toggle switches store '1', but the backend defaults (Extend\Settings->default)
+  // arrive as booleans until the settings are saved once — accept both.
+  _flagOn(key) {
+    const value = this.setting(key, '')();
+    return value === '1' || value === true || value === 1;
+  }
+
   _toggle(key, labelKey, descKey) {
     return m('.Form-group', [
       m(
         Switch,
         {
-          state: this.setting(key, '')() === '1',
+          state: this._flagOn(key),
           onchange: (value) => {
             this.setting(key)(value ? '1' : '');
             m.redraw();

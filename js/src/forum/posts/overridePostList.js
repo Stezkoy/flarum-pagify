@@ -21,11 +21,11 @@ const POST_LIST_STATE = 'flarum/forum/states/PostListState';
  */
 export default function overridePostList() {
   // Force the configured page size onto every request and the pager math.
-  // Core's own loadPage keeps its preload branch (meta.perPage), which wins on
-  // a preloaded first page and keeps the math consistent either way.
+  // Independent of the pagination toggle (like the discussion list's perPage):
+  // with pagination off it sizes each "Load more" batch. Core's own loadPage
+  // keeps its preload branch (meta.perPage), which wins on a preloaded first
+  // page and keeps the math consistent either way.
   override(POST_LIST_STATE, 'loadPage', function (original, page) {
-    if (!postListEnabled()) return original(page);
-
     this.pageSize = postListPerPage();
 
     return original(page);

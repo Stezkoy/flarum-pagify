@@ -16,9 +16,9 @@ return [
     new Extend\Locales(__DIR__.'/locale'),
 
     (new Extend\Settings())
-        ->default('stezkoy-pagify.enableDiscussionList', true)
-        ->default('stezkoy-pagify.enablePostStream', true)
-        ->default('stezkoy-pagify.enablePostList', true)
+        ->default('stezkoy-pagify.enableDiscussionList', '1')
+        ->default('stezkoy-pagify.enablePostStream', '1')
+        ->default('stezkoy-pagify.enablePostList', '1')
         ->default('stezkoy-pagify.perPage', 20)
         ->default('stezkoy-pagify.postsPerPage', 20)
         ->default('stezkoy-pagify.postListPerPage', 20)
