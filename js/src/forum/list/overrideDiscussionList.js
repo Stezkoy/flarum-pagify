@@ -2,6 +2,7 @@ import app from 'flarum/forum/app';
 import { override } from 'flarum/common/extend';
 import DiscussionList from 'flarum/forum/components/DiscussionList';
 import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
+import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import Placeholder from 'flarum/common/components/Placeholder';
 import classList from 'flarum/common/utils/classList';
@@ -12,13 +13,40 @@ import { listEnabled, perPage, position } from './config';
 /**
  * Render the discussion list as a single page plus a numbered pager.
  *
- * The v2 core's PaginatedListState already knows pageSize (from meta.perPage)
- * and totalItems (from meta.page.total) and already has goto(page), which swaps
- * the loaded page — so the pagination state needs no custom overrides. We only
- * take over the view: show the current page alone, drop the "Load more"
- * button, and render the pager above and/or under the list.
+ * Two problems needed fixing on top of the stock state:
+ *
+ * 1. View — show the current page alone, drop the "Load more" button, and
+ *    render a numbered pager above and/or under the list.
+ *
+ * 2. Page size — v2's list responses carry pagination dimensions in
+ *    `meta.page.{offset,limit,total}`, NOT a top-level `meta.perPage`, so the
+ *    stock PaginatedListState always keeps `pageSize = DEFAULT_PAGE_SIZE` (20).
+ *    The NormalizeListLimit middleware trims the server-side preload to our
+ *    configured perPage, which makes page 1 look right, but every subsequent
+ *    fetch would then be asked for offset/limit on the core's hard-coded 20.
+ *    `loadPage` is re-implemented below to force `pageSize = perPage()` for
+ *    both the preloaded document and all live requests.
  */
 export default function overrideDiscussionList() {
+  // Force the configured perPage onto the list state so that every live
+  // request, and the pager's page math, agree with what the middleware trims
+  // the server-side preload (page 1) to.
+  override(DiscussionListState.prototype, 'loadPage', function (original, page) {
+    if (!listEnabled()) return original(page);
+
+    const preloaded = app.preloadedApiDocument();
+    if (preloaded) {
+      this.initialLoading = false;
+      this.pageSize = perPage();
+
+      return Promise.resolve(preloaded);
+    }
+
+    this.pageSize = perPage();
+
+    return original(page);
+  });
+
   override(DiscussionList.prototype, 'view', function (original) {
     const state = this.attrs.state;
 
