@@ -40,10 +40,10 @@ export default function overrideDiscussionPage() {
     if (post.isHidden && post.isHidden()) return;
     items.add(
       'pagify-postnumber',
-      <div className="PagifyPostNumber">
+      <span className="PagifyPostNumber">
         <span>#</span>
         {post.number()}
-      </div>,
+      </span>,
       0
     );
   });
