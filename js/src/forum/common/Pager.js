@@ -34,7 +34,7 @@ export default class Pager extends Component {
       items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
       items.push(this.navItem('fas fa-angle-double-right', totalPages, current === totalPages, 'forum.list.last'));
 
-      if (mode !== 'mini' && this.attrs.jump) {
+      if (this.attrs.jump) {
         items.push(
           <li className="PagifyPager-jump">
             <input
