@@ -10,7 +10,10 @@
   text-align: center;
 
   .Button:not(.Button--icon) {
-    min-width: 36px;
+    height: var(--pagify-size, 36px);
+    min-width: var(--pagify-size, 36px);
+    padding-top: 0;
+    padding-bottom: 0;
     text-align: center;
   }
 
@@ -20,7 +23,8 @@
   }
 
   .Button.Button--icon {
-    height: 36px;
+    width: var(--pagify-size, 36px);
+    height: var(--pagify-size, 36px);
   }
 
   &-jump {
@@ -39,8 +43,8 @@
     outline: none;
     border: 1px solid transparent;
     border-radius: var(--border-radius);
-    width: 48px;
-    height: 36px;
+    width: calc(var(--pagify-size, 36px) + 12px);
+    height: var(--pagify-size, 36px);
     padding: 0 8px;
 
     &:hover {
@@ -78,8 +82,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 36px;
-    min-width: 36px;
+    height: var(--pagify-size, 36px);
+    min-width: var(--pagify-size, 36px);
     padding: 0 8px;
     border-radius: var(--border-radius);
     background: var(--button-bg);
@@ -93,8 +97,8 @@
   &-current {
     color: var(--control-color);
     font-weight: bold;
-    height: 36px;
-    line-height: 36px;
+    height: var(--pagify-size, 36px);
+    line-height: var(--pagify-size, 36px);
     margin: 0 8px;
   }
 

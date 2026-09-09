@@ -23,6 +23,8 @@ stezkoy-pagify:
       postListPosition: Позиция пагинации
 
       pager_heading: Пейджер
+      urlPage: Пагинация в адресной строке
+      urlPage-Help: Ссылки вида ?page=2 открывают нужную страницу, кнопки назад/вперёд браузера листают список и ленту.
       pagerMode: Режим
       pagerMode-Help: Полный — крайние страницы, номера вокруг текущей и поле перехода; компактный — только номера вокруг текущей; строка — счётчик с полем ввода как в админке; мини — только стрелки и позиция.
       pager_mode_full: Полный
@@ -31,6 +33,8 @@ stezkoy-pagify:
       pager_mode_mini: Мини
       pagerWindow: Страниц вокруг текущей
       pagerWindow-Help: Сколько номеров страниц показывать по обе стороны от текущей.
+      pagerButtonSize: Размер кнопок, px
+      pagerButtonSize-Help: Высота и ширина кнопок пейджера. По умолчанию 36.
       pagerCounter: Показывать «Страница X из Y»
       pagerCounter-Help: Текущая страница и общее количество под пейджером. В полном и компактном режимах.
       pagerJumpList: Поле перехода — список тем
@@ -45,6 +49,12 @@ stezkoy-pagify:
       pagerPreview-Help: Нажмите на значок в превью, чтобы изменить его. Пустое поле или «Сбросить» вернут иконку по умолчанию.
       pageOfText: Страница {page} из {total}
       pageInputText: Страница {input} из {total}
+      pagerAriaLabel: Постраничная навигация
+      pagerLabelFirst: Первая страница
+      pagerLabelPrev: Предыдущая страница
+      pagerLabelNext: Следующая страница
+      pagerLabelLast: Последняя страница
+      pagerLabelJump: Перейти к странице
       iconFirst: Иконка — первая страница
       iconPrev: Иконка — предыдущая страница
       iconNext: Иконка — следующая страница

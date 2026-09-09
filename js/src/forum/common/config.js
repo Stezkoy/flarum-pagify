@@ -30,6 +30,11 @@ export function pagerScrollOffset() {
   return Number.isFinite(value) ? value : 80;
 }
 
+export function pagerButtonSize() {
+  const value = parseInt(app.forum.attribute('stezkoyPagify.pagerButtonSize'));
+  return value >= 24 && value <= 72 ? value : 36;
+}
+
 export function isPhone() {
   return window.matchMedia('(max-width: 767px)').matches;
 }
@@ -66,6 +71,37 @@ export function mobileHideJump() {
 
 export function mobileHideCounter() {
   return !!app.forum.attribute('stezkoyPagify.mobileHideCounter');
+}
+
+export function urlPage() {
+  return !!app.forum.attribute('stezkoyPagify.urlPage');
+}
+
+export function readPageParam() {
+  if (!urlPage()) return 1;
+
+  const page = parseInt(m.route.param('page'), 10);
+
+  return Number.isFinite(page) && page > 1 ? page : 1;
+}
+
+export function setPageParam(page) {
+  const url = new URL(window.location.href);
+
+  if (page > 1) url.searchParams.set('page', String(page));
+  else url.searchParams.delete('page');
+
+  window.history.pushState(null, '', url.toString());
+}
+
+let activeList = null;
+
+export function setActiveList(entry) {
+  activeList = entry;
+}
+
+export function getActiveList() {
+  return activeList;
 }
 
 export function pagerTrans(key, params) {

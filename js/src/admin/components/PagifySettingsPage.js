@@ -11,6 +11,12 @@ const PREFIX = 'stezkoy-pagify';
 const MIRRORED_PREVIEW_KEYS = {
   'forum.list.pageOf': 'admin.settings.pageOfText',
   'forum.list.pageInput': 'admin.settings.pageInputText',
+  'forum.list.aria_label': 'admin.settings.pagerAriaLabel',
+  'forum.list.first': 'admin.settings.pagerLabelFirst',
+  'forum.list.previous': 'admin.settings.pagerLabelPrev',
+  'forum.list.next': 'admin.settings.pagerLabelNext',
+  'forum.list.last': 'admin.settings.pagerLabelLast',
+  'forum.list.jump': 'admin.settings.pagerLabelJump',
 };
 
 export default class PagifySettingsPage extends ExtensionPage {
@@ -94,6 +100,7 @@ export default class PagifySettingsPage extends ExtensionPage {
 
   _pagerSection() {
     return this._section('admin.settings.pager_heading', [
+      this._toggle(PREFIX + '.urlPage', 'admin.settings.urlPage', 'admin.settings.urlPage-Help'),
       m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.pagerMode')),
         m('select.FormControl', {
@@ -119,6 +126,16 @@ export default class PagifySettingsPage extends ExtensionPage {
           bidi: this.setting(PREFIX + '.pagerWindow'),
         }),
         m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerWindow-Help')),
+      ]),
+      m('.Form-group', [
+        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerButtonSize')),
+        m('input.FormControl', {
+          type: 'number',
+          min: 24,
+          max: 72,
+          bidi: this.setting(PREFIX + '.pagerButtonSize'),
+        }),
+        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerButtonSize-Help')),
       ]),
       this._toggle(PREFIX + '.pagerCounter', 'admin.settings.pagerCounter', 'admin.settings.pagerCounter-Help'),
       this._toggle(PREFIX + '.pagerJumpList', 'admin.settings.pagerJumpList', 'admin.settings.pagerJumpList-Help'),
@@ -235,6 +252,7 @@ export default class PagifySettingsPage extends ExtensionPage {
         this._flagOn(PREFIX + '.pagerJumpList') ||
         this._flagOn(PREFIX + '.pagerJumpStream') ||
         this._flagOn(PREFIX + '.pagerJumpFeed'),
+      buttonSize: parseInt(this.setting(PREFIX + '.pagerButtonSize')(), 10) || 36,
       icons: {
         first: (this.setting(PREFIX + '.pagerIconFirst')() || '').trim() || null,
         prev: (this.setting(PREFIX + '.pagerIconPrev')() || '').trim() || null,

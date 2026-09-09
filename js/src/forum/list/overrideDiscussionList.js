@@ -1,5 +1,5 @@
 import app from 'flarum/forum/app';
-import { override } from 'flarum/common/extend';
+import { override, extend } from 'flarum/common/extend';
 import DiscussionList from 'flarum/forum/components/DiscussionList';
 import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 import DiscussionListState from 'flarum/forum/states/DiscussionListState';
@@ -9,7 +9,7 @@ import classList from 'flarum/common/utils/classList';
 
 import Pager from '../common/Pager';
 import { listEnabled, perPage, position } from './config';
-import { pagerMode, pagerWindow, pagerCounter, pagerJumpList, pagerScrollOffset, pagerIcons, mobileCompact, mobileSmall, mobileButtonSize, mobileHideJump, mobileHideCounter, pagerTrans } from '../common/config';
+import { pagerMode, pagerWindow, pagerCounter, pagerJumpList, pagerScrollOffset, pagerButtonSize, pagerIcons, mobileCompact, mobileSmall, mobileButtonSize, mobileHideJump, mobileHideCounter, pagerTrans, urlPage, readPageParam, setActiveList } from '../common/config';
 
 export default function overrideDiscussionList() {
   override(DiscussionListState.prototype, 'loadPage', function (original, page) {
@@ -17,6 +17,11 @@ export default function overrideDiscussionList() {
     if (preloaded) {
       this.initialLoading = false;
       this.pageSize = perPage();
+
+      // A deep link like /?page=5 preloads page 5 server-side — adopt it as
+      // the current page instead of mislabelling it as page 1.
+      const requested = readPageParam();
+      if (requested > 1) this.location = { page: requested };
 
       return Promise.resolve(preloaded);
     }
@@ -28,6 +33,8 @@ export default function overrideDiscussionList() {
 
   override(DiscussionList.prototype, 'view', function (original) {
     const state = this.attrs.state;
+
+    setActiveList({ state, scrollSelector: '.DiscussionList', scrollOffset: pagerScrollOffset() });
 
     if (!listEnabled()) {
       return original();
@@ -88,6 +95,7 @@ export default function overrideDiscussionList() {
       counter: pagerCounter(),
       jump: pagerJumpList(),
       scrollOffset: pagerScrollOffset(),
+      buttonSize: pagerButtonSize(),
       icons: pagerIcons(),
       mobileCompact: mobileCompact(),
       mobileSmall: mobileSmall(),
@@ -103,5 +111,9 @@ export default function overrideDiscussionList() {
         {pos === 'under' || pos === 'both' ? pager() : null}
       </div>
     );
+  });
+
+  extend(DiscussionList.prototype, 'onremove', function () {
+    if (urlPage()) setActiveList(null);
   });
 }

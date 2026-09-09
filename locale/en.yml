@@ -23,6 +23,8 @@ stezkoy-pagify:
       postListPosition: Pager position
 
       pager_heading: Pager
+      urlPage: Pagination in the address bar
+      urlPage-Help: Links like ?page=2 open the right page, and the browser back/forward buttons navigate the list and the feed.
       pagerMode: Mode
       pagerMode-Help: Full shows the edge pages, the numbers around the current one and a jump field; compact shows just the numbers around the current one; line shows a counter with an input like the admin pager; mini shows arrows and the position only.
       pager_mode_full: Full
@@ -31,6 +33,8 @@ stezkoy-pagify:
       pager_mode_mini: Mini
       pagerWindow: Pages around the current one
       pagerWindow-Help: How many page numbers to show on each side of the current page.
+      pagerButtonSize: Button size, px
+      pagerButtonSize-Help: Pager button height and width. Defaults to 36.
       pagerCounter: Show "Page X of Y"
       pagerCounter-Help: Display the current page and the total under the pager. Full and compact modes only.
       pagerJumpList: Jump field — discussion list
@@ -45,6 +49,12 @@ stezkoy-pagify:
       pagerPreview-Help: Click an icon in the preview to change it. An empty field or "Reset" restores the default icon.
       pageOfText: Page {page} of {total}
       pageInputText: Page {input} of {total}
+      pagerAriaLabel: Pagination
+      pagerLabelFirst: First page
+      pagerLabelPrev: Previous page
+      pagerLabelNext: Next page
+      pagerLabelLast: Last page
+      pagerLabelJump: Jump to page
       iconFirst: Icon — first page
       iconPrev: Icon — previous page
       iconNext: Icon — next page

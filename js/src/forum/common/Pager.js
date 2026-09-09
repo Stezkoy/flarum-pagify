@@ -1,6 +1,6 @@
 import Button from 'flarum/common/components/Button';
 import Component from 'flarum/common/Component';
-import { isPhone } from './config';
+import { isPhone, urlPage, setPageParam } from './config';
 
 export const PAGER_ICON_DEFAULTS = {
   first: 'fas fa-step-backward',
@@ -30,6 +30,14 @@ export default class Pager extends Component {
       this.attrs.mobileHideJump ? 'pagifyHideJump' : '',
       this.attrs.mobileHideCounter ? 'pagifyHideCounter' : '',
     ].filter(Boolean).join(' ');
+
+    const styleProps = [
+      '--pagify-size:' + (parseInt(this.attrs.buttonSize, 10) || 36) + 'px',
+    ];
+
+    if (this.attrs.mobileSmall) {
+      styleProps.push('--pagify-mobile-size:' + (parseInt(this.attrs.mobileButtonSize, 10) || 22) + 'px');
+    }
 
     const items = [];
 
@@ -123,9 +131,7 @@ export default class Pager extends Component {
     return (
       <nav
         className={classes}
-        style={this.attrs.mobileSmall
-          ? '--pagify-mobile-size:' + (parseInt(this.attrs.mobileButtonSize, 10) || 22) + 'px'
-          : ''}
+        style={styleProps.join(';')}
         aria-label={this.attrs.ariaLabel || trans('forum.list.aria_label')}
       >
         {items}
@@ -216,7 +222,10 @@ export default class Pager extends Component {
 
     if (target === (state.getLocation().page || 1)) return;
 
-    state.goto(target).then(() => this.scrollToTop());
+    state.goto(target).then(() => {
+      if (urlPage()) setPageParam(target);
+      this.scrollToTop();
+    });
   }
 
   jump(state, rawValue) {
@@ -231,18 +240,22 @@ export default class Pager extends Component {
     // The post stream anchors its own scroll (goToPage), so it opts out.
     if (this.attrs.scroll === false) return;
 
-    setTimeout(() => {
-      const list = document.querySelector(this.attrs.scrollSelector || '.DiscussionList')
-        || document.querySelector('.Page-content');
-      const header = document.getElementById('header');
-      const offsetY = header ? header.clientHeight : 0;
-      const scrollOffset = parseInt(this.attrs.scrollOffset, 10);
-      const extra = Number.isFinite(scrollOffset) ? scrollOffset : 80;
-
-      if (list) {
-        const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY - extra;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-      }
-    }, 50);
+    scrollListTop(this.attrs.scrollSelector, this.attrs.scrollOffset);
   }
+}
+
+export function scrollListTop(scrollSelector, extraOffset) {
+  setTimeout(() => {
+    const list = document.querySelector(scrollSelector || '.DiscussionList')
+      || document.querySelector('.Page-content');
+    const header = document.getElementById('header');
+    const offsetY = header ? header.clientHeight : 0;
+    const parsed = parseInt(extraOffset, 10);
+    const offset = Number.isFinite(parsed) ? parsed : 80;
+
+    if (list) {
+      const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY - offset;
+      window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    }
+  }, 50);
 }
