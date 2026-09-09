@@ -111,7 +111,9 @@ export default class PagifySettingsPage extends ExtensionPage {
         m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerWindow-Help')),
       ]),
       this._toggle(PREFIX + '.pagerCounter', 'admin.settings.pagerCounter', 'admin.settings.pagerCounter-Help'),
-      this._toggle(PREFIX + '.pagerJump', 'admin.settings.pagerJump', 'admin.settings.pagerJump-Help'),
+      this._toggle(PREFIX + '.pagerJumpList', 'admin.settings.pagerJumpList', 'admin.settings.pagerJumpList-Help'),
+      this._toggle(PREFIX + '.pagerJumpStream', 'admin.settings.pagerJumpStream', 'admin.settings.pagerJumpStream-Help'),
+      this._toggle(PREFIX + '.pagerJumpFeed', 'admin.settings.pagerJumpFeed', 'admin.settings.pagerJumpFeed-Help'),
       m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.pagerPreview')),
         m('.PagifySettings-preview', this._pagerPreview()),
@@ -135,7 +137,10 @@ export default class PagifySettingsPage extends ExtensionPage {
       mode: this.setting(PREFIX + '.pagerMode')() || 'full',
       window: this.setting(PREFIX + '.pagerWindow')(),
       counter: this._flagOn(PREFIX + '.pagerCounter'),
-      jump: this._flagOn(PREFIX + '.pagerJump'),
+      jump:
+        this._flagOn(PREFIX + '.pagerJumpList') ||
+        this._flagOn(PREFIX + '.pagerJumpStream') ||
+        this._flagOn(PREFIX + '.pagerJumpFeed'),
       scrollSelector: '.PagifySettings',
     });
   }

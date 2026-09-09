@@ -5,7 +5,7 @@ import classList from 'flarum/common/utils/classList';
 
 import Pager from '../common/Pager';
 import { postListEnabled, postListPerPage, postListPosition } from './config';
-import { pagerMode, pagerWindow, pagerCounter, pagerJump, pagerTrans } from '../common/config';
+import { pagerMode, pagerWindow, pagerCounter, pagerJumpFeed, pagerTrans } from '../common/config';
 
 const POST_LIST = 'flarum/forum/components/PostList';
 const POST_LIST_STATE = 'flarum/forum/states/PostListState';
@@ -52,7 +52,7 @@ export default function overridePostList() {
 
     const position = postListPosition();
     const pager = (key) => <Pager key={key} state={state} perPage={postListPerPage} scrollSelector=".PostList"
-      trans={pagerTrans} mode={pagerMode()} window={pagerWindow()} counter={pagerCounter()} jump={pagerJump()} />;
+      trans={pagerTrans} mode={pagerMode()} window={pagerWindow()} counter={pagerCounter()} jump={pagerJumpFeed()} />;
 
     if (position === 'under' || position === 'both') vdom.children.push(pager('pagify-postlist-pager-bottom'));
     if (position === 'above' || position === 'both') vdom.children.unshift(pager('pagify-postlist-pager-top'));

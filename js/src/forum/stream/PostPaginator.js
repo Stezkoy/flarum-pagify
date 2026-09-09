@@ -3,7 +3,7 @@ import Component from 'flarum/common/Component';
 import goToPage from './goToPage';
 import Pager from '../common/Pager';
 import { postsPerPage, streamEnabled } from './config';
-import { pagerMode, pagerWindow, pagerCounter, pagerJump, pagerTrans } from '../common/config';
+import { pagerMode, pagerWindow, pagerCounter, pagerJumpStream, pagerTrans } from '../common/config';
 
 export default class PostPaginator extends Component {
   view() {
@@ -35,7 +35,7 @@ export default class PostPaginator extends Component {
         mode={pagerMode()}
         window={pagerWindow()}
         counter={pagerCounter()}
-        jump={pagerJump()}
+        jump={pagerJumpStream()}
         scroll={false}
         ariaLabel={pagerTrans('forum.post_stream.aria_label')}
       />

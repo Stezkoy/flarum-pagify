@@ -13,8 +13,16 @@ export function pagerCounter() {
   return !!app.forum.attribute('stezkoyPagify.pagerCounter');
 }
 
-export function pagerJump() {
-  return !!app.forum.attribute('stezkoyPagify.pagerJump');
+export function pagerJumpList() {
+  return !!app.forum.attribute('stezkoyPagify.pagerJumpList');
+}
+
+export function pagerJumpStream() {
+  return !!app.forum.attribute('stezkoyPagify.pagerJumpStream');
+}
+
+export function pagerJumpFeed() {
+  return !!app.forum.attribute('stezkoyPagify.pagerJumpFeed');
 }
 
 export function pagerTrans(key, params) {

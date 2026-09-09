@@ -32,8 +32,12 @@ stezkoy-pagify:
       pagerWindow-Help: How many page numbers to show on each side of the current page.
       pagerCounter: Show "Page X of Y"
       pagerCounter-Help: Display the current page and the total under the pager.
-      pagerJump: Jump-to-page field
-      pagerJump-Help: Show the page-number input next to the pager (full mode only).
+      pagerJumpList: Jump field — discussion list
+      pagerJumpList-Help: Show the page-number input in the discussion list pager.
+      pagerJumpStream: Jump field — post stream
+      pagerJumpStream-Help: Show the page-number input in the post stream pager.
+      pagerJumpFeed: Jump field — post feed
+      pagerJumpFeed-Help: Show the page-number input on the profile activity feed and the posts page.
       pagerPreview: Preview
       pageOfText: Page {page} of {total}
 
