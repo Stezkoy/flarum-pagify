@@ -34,7 +34,7 @@ export default class Pager extends Component {
       items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
       items.push(this.navItem('fas fa-angle-double-right', totalPages, current === totalPages, 'forum.list.last'));
 
-      if (mode === 'full' && this.attrs.jump) {
+      if (mode !== 'mini' && this.attrs.jump) {
         items.push(
           <li className="PagifyPager-jump">
             <input
@@ -67,7 +67,7 @@ export default class Pager extends Component {
     }
 
     return (
-      <div className="PagifyPager">
+      <div className="PagifyPager" aria-label={this.attrs.ariaLabel}>
         <ul className="PagifyPager-list">{items}</ul>
         {mode !== 'mini' && this.attrs.counter ? (
           <div className="PagifyPager-counter">{trans('forum.list.pageOf', { page: current, total: totalPages })}</div>
@@ -160,6 +160,9 @@ export default class Pager extends Component {
 
   scrollToTop() {
     // This pager instance unmounts mid-request — resolve the list from the live DOM.
+    // The post stream anchors its own scroll (goToPage), so it opts out.
+    if (this.attrs.scroll === false) return;
+
     setTimeout(() => {
       const list = document.querySelector(this.attrs.scrollSelector || '.DiscussionList')
         || document.querySelector('.Page-content');

@@ -30,6 +30,10 @@
     padding-right: 13px;
   }
 
+  .Button.Button--icon {
+    height: 36px;
+  }
+
   &-jump {
     margin-left: 8px;
 
@@ -70,13 +74,20 @@
   }
 
   &-ellipsis {
-    color: var(--muted-color);
-    font-size: 13px;
-    letter-spacing: 3px;
-    line-height: 36px;
-    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    min-width: 36px;
+    padding: 0 8px;
+    border-radius: var(--border-radius);
+    background: var(--button-bg);
+    color: var(--button-color);
+    font-weight: bold;
+    letter-spacing: 2px;
     margin-bottom: 4px;
     margin-top: 4px;
+    user-select: none;
   }
 
   &-current {
