@@ -21,8 +21,8 @@ export default class Pager extends Component {
       items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
     } else {
       const pages = mode === 'compact'
-        ? this.compactPageList(current, totalPages, windowSize)
-        : this.pageList(current, totalPages, windowSize);
+        ? this.pageList(current, totalPages, windowSize)
+        : this.compactPageList(current, totalPages, windowSize);
 
       items.push(this.navItem('fas fa-angle-double-left', 1, current === 1, 'forum.list.first'));
       items.push(this.navItem('fas fa-angle-left', current - 1, current === 1, 'forum.list.previous'));
@@ -34,7 +34,7 @@ export default class Pager extends Component {
       items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
       items.push(this.navItem('fas fa-angle-double-right', totalPages, current === totalPages, 'forum.list.last'));
 
-      if (this.attrs.jump) {
+      if (mode === 'full' && this.attrs.jump) {
         items.push(
           <li className="PagifyPager-jump">
             <input

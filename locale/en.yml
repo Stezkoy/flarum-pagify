@@ -24,7 +24,7 @@ stezkoy-pagify:
 
       pager_heading: Pager
       pagerMode: Mode
-      pagerMode-Help: Full shows page numbers with a jump field, compact trims the numbers, mini shows only arrows and the current position.
+      pagerMode-Help: Full shows the edge pages, the numbers around the current one and a jump field; compact shows just the numbers around the current one; mini shows arrows and the position only.
       pager_mode_full: Full
       pager_mode_compact: Compact
       pager_mode_mini: Mini
@@ -35,6 +35,7 @@ stezkoy-pagify:
       pagerJump: Jump-to-page field
       pagerJump-Help: Show the page-number input next to the pager (full mode only).
       pagerPreview: Preview
+      pageOfText: Page {page} of {total}
 
       position:
         above: Above

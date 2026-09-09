@@ -131,7 +131,7 @@ export default class PagifySettingsPage extends ExtensionPage {
     return Pager.component({
       state,
       perPage: () => 20,
-      trans: (key, params) => app.translator.trans(PREFIX + '.' + key, params),
+      trans: (key, params) => app.translator.trans(PREFIX + '.' + (key === 'forum.list.pageOf' ? 'admin.settings.pageOfText' : key), params),
       mode: this.setting(PREFIX + '.pagerMode')() || 'full',
       window: this.setting(PREFIX + '.pagerWindow')(),
       counter: this._flagOn(PREFIX + '.pagerCounter'),
