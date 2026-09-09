@@ -200,13 +200,12 @@ export default class PagifySettingsPage extends ExtensionPage {
     return this._section('admin.settings.mobile_heading', [
       this._toggle(PREFIX + '.mobileCompact', 'admin.settings.mobileCompact', 'admin.settings.mobileCompact-Help'),
       this._toggle(PREFIX + '.mobileSmall', 'admin.settings.mobileSmall', 'admin.settings.mobileSmall-Help'),
-      m('.Form-group', [
+      this._flagOn(PREFIX + '.mobileSmall') && m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.mobileButtonSize')),
         m('input.FormControl', {
           type: 'number',
           min: 14,
           max: 60,
-          disabled: !this._flagOn(PREFIX + '.mobileSmall'),
           bidi: this.setting(PREFIX + '.mobileButtonSize'),
         }),
         m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.mobileButtonSize-Help')),

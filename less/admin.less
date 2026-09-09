@@ -80,22 +80,24 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
-    }
 
-    .iconEditPreview {
-      width: 36px;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px dashed var(--muted-color);
-      border-radius: var(--border-radius);
-      flex-shrink: 0;
-    }
+      .iconEditPreview {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px dashed var(--muted-color);
+        border-radius: var(--border-radius);
+        flex-shrink: 0;
+      }
 
-    .FormControl {
-      max-width: 280px;
+      .FormControl {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 140px;
+        max-width: 280px;
+      }
     }
   }
 }
