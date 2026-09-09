@@ -2,7 +2,7 @@ import app from 'flarum/forum/app';
 
 export function pagerMode() {
   const value = app.forum.attribute('stezkoyPagify.pagerMode');
-  return ['full', 'compact', 'mini'].includes(value) ? value : 'full';
+  return ['full', 'compact', 'mini', 'core'].includes(value) ? value : 'full';
 }
 
 export function pagerWindow() {

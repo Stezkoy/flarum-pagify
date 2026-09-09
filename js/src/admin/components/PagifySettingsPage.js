@@ -96,6 +96,7 @@ export default class PagifySettingsPage extends ExtensionPage {
         }, [
           m('option', { value: 'full' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_full')),
           m('option', { value: 'compact' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_compact')),
+          m('option', { value: 'core' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_core')),
           m('option', { value: 'mini' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_mini')),
         ]),
         m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerMode-Help')),

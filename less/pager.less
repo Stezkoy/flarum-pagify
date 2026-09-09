@@ -28,39 +28,46 @@
     align-items: center;
     gap: 4px;
     margin-left: 8px;
+  }
 
-    input {
-      color: var(--button-color);
-      background: var(--button-bg);
-      text-align: center;
-      vertical-align: middle;
-      font-weight: bold;
-      outline: none;
-      border: 1px solid transparent;
-      border-radius: var(--border-radius);
-      width: 48px;
-      height: 36px;
+  &-numInput {
+    color: var(--button-color);
+    background: var(--button-bg);
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+    width: 48px;
+    height: 36px;
+    padding: 0 8px;
 
-      &:hover {
-        border-color: var(--muted-color);
-      }
-
-      &:focus,
-      &:not(:placeholder-shown) {
-        border-color: var(--primary-color);
-      }
-
-      &::-webkit-outer-spin-button,
-      &::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-
-      &[type='number'] {
-        -moz-appearance: textfield;
-        appearance: textfield;
-      }
+    &:hover {
+      border-color: var(--muted-color);
     }
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      border-color: var(--primary-color);
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type='number'] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+  }
+
+  &-core {
+    display: inline-flex;
+    align-items: center;
+    color: var(--control-color);
   }
 
   &-ellipsis {

@@ -24,9 +24,10 @@ stezkoy-pagify:
 
       pager_heading: Pager
       pagerMode: Mode
-      pagerMode-Help: Full shows the edge pages, the numbers around the current one and a jump field; compact shows just the numbers around the current one; mini shows arrows and the position only.
+      pagerMode-Help: Full shows the edge pages, the numbers around the current one and a jump field; compact shows just the numbers around the current one; line shows a counter with an input like the admin pager; mini shows arrows and the position only.
       pager_mode_full: Full
       pager_mode_compact: Compact
+      pager_mode_core: Line
       pager_mode_mini: Mini
       pagerWindow: Pages around the current one
       pagerWindow-Help: How many page numbers to show on each side of the current page.
@@ -57,6 +58,7 @@ stezkoy-pagify:
       last: Last page
       jump: Jump to page
       pageOf: Page {page} of {total}
+      pageInput: Page {input} of {total}
     post_stream:
       aria_label: Post pages
       first: First page

@@ -19,6 +19,43 @@ export default class Pager extends Component {
       items.push(this.navItem('fas fa-chevron-left', current - 1, current === 1, 'forum.list.previous'));
       items.push(<span className="PagifyPager-current">{current} / {totalPages}</span>);
       items.push(this.navItem('fas fa-chevron-right', current + 1, current === totalPages, 'forum.list.next'));
+    } else if (mode === 'core') {
+      items.push(this.navItem('fas fa-step-backward', 1, current === 1, 'forum.list.first'));
+      items.push(this.navItem('fas fa-chevron-left', current - 1, current === 1, 'forum.list.previous'));
+      items.push(
+        <span className="PagifyPager-core">
+          {trans('forum.list.pageInput', {
+            input: (
+              <input
+                className="FormControl PagifyPager-numInput"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                value={String(current)}
+                maxLength={String(totalPages).length}
+                aria-label={trans('forum.list.jump')}
+                autocomplete="off"
+                onchange={(event) => {
+                  const value = parseInt(event.target.value, 10);
+
+                  if (!Number.isFinite(value)) {
+                    event.target.value = String(current);
+                    return;
+                  }
+
+                  const target = Math.min(Math.max(1, value), totalPages);
+                  event.target.value = String(target);
+
+                  if (target !== current) this.goto(state, target);
+                }}
+              />
+            ),
+            total: totalPages,
+          })}
+        </span>
+      );
+      items.push(this.navItem('fas fa-chevron-right', current + 1, current === totalPages, 'forum.list.next'));
+      items.push(this.navItem('fas fa-step-forward', totalPages, current === totalPages, 'forum.list.last'));
     } else {
       const pages = mode === 'compact'
         ? this.pageList(current, totalPages, windowSize)
@@ -35,11 +72,11 @@ export default class Pager extends Component {
       items.push(this.navItem('fas fa-step-forward', totalPages, current === totalPages, 'forum.list.last'));
     }
 
-    if (this.attrs.jump) {
+    if (this.attrs.jump && mode !== 'core') {
       items.push(
         <span className="PagifyPager-jump">
           <input
-            className="FormControl"
+            className="FormControl PagifyPager-numInput"
             type="text"
             inputmode="numeric"
             pattern="[0-9]*"
@@ -68,7 +105,7 @@ export default class Pager extends Component {
     return (
       <nav className="PagifyPager" aria-label={this.attrs.ariaLabel || trans('forum.list.aria_label')}>
         {items}
-        {mode !== 'mini' && this.attrs.counter ? (
+        {mode !== 'mini' && mode !== 'core' && this.attrs.counter ? (
           <span className="PagifyPager-counter">{trans('forum.list.pageOf', { page: current, total: totalPages })}</span>
         ) : null}
       </nav>
