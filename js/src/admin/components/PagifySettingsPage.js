@@ -235,8 +235,8 @@ export default class PagifySettingsPage extends ExtensionPage {
   _pagerPreview() {
     const state = {
       pageSize: 20,
-      totalItems: 500,
-      getLocation: () => ({ page: 12 }),
+      totalItems: 2000,
+      getLocation: () => ({ page: 99 }),
       goto: () => Promise.resolve(),
       getPages: () => [],
     };
