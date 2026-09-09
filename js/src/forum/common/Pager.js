@@ -33,37 +33,37 @@ export default class Pager extends Component {
 
       items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
       items.push(this.navItem('fas fa-angle-double-right', totalPages, current === totalPages, 'forum.list.last'));
+    }
 
-      if (this.attrs.jump) {
-        items.push(
-          <li className="PagifyPager-jump">
-            <input
-              className="FormControl"
-              type="text"
-              inputmode="numeric"
-              pattern="[0-9]*"
-              maxLength={String(totalPages).length + 1}
-              placeholder={String(current)}
-              aria-label={trans('forum.list.jump')}
-              title={trans('forum.list.jump')}
-              onkeydown={(event) => {
-                if (event.key === 'Enter') {
-                  event.redraw = false;
-                  this.jump(state, event.target.value);
-                }
-              }}
-            />
-          </li>,
-          <li>
-            <Button
-              title={trans('forum.list.jump')}
-              icon="fas fa-arrow-right"
-              className="Button Button--icon"
-              onclick={() => this.jump(state, this.element.querySelector('input')?.value)}
-            />
-          </li>
-        );
-      }
+    if (this.attrs.jump) {
+      items.push(
+        <li className="PagifyPager-jump">
+          <input
+            className="FormControl"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxLength={String(totalPages).length + 1}
+            placeholder={String(current)}
+            aria-label={trans('forum.list.jump')}
+            title={trans('forum.list.jump')}
+            onkeydown={(event) => {
+              if (event.key === 'Enter') {
+                event.redraw = false;
+                this.jump(state, event.target.value);
+              }
+            }}
+          />
+        </li>,
+        <li>
+          <Button
+            title={trans('forum.list.jump')}
+            icon="fas fa-arrow-right"
+            className="Button Button--icon"
+            onclick={() => this.jump(state, this.element.querySelector('input')?.value)}
+          />
+        </li>
+      );
     }
 
     return (
