@@ -31,7 +31,7 @@ stezkoy-pagify:
       pagerWindow: Pages around the current one
       pagerWindow-Help: How many page numbers to show on each side of the current page.
       pagerCounter: Show "Page X of Y"
-      pagerCounter-Help: Display the current page and the total under the pager.
+      pagerCounter-Help: Display the current page and the total under the pager. Full and compact modes only.
       pagerJumpList: Jump field — discussion list
       pagerJumpList-Help: Show the page-number input in the discussion list pager.
       pagerJumpStream: Jump field — post stream
