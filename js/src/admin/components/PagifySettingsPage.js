@@ -118,7 +118,7 @@ export default class PagifySettingsPage extends ExtensionPage {
         m('label', app.translator.trans(PREFIX + '.admin.settings.pagerScrollOffset')),
         m('input.FormControl', {
           type: 'number',
-          min: 0,
+          min: -500,
           max: 500,
           bidi: this.setting(PREFIX + '.pagerScrollOffset'),
         }),

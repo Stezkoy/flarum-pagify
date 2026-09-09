@@ -39,7 +39,7 @@ stezkoy-pagify:
       pagerJumpFeed: Jump field — post feed
       pagerJumpFeed-Help: Show the page-number input on the profile activity feed and the posts page.
       pagerScrollOffset: Scroll offset, px
-      pagerScrollOffset-Help: How many pixels above the first discussion or post to land when switching pages.
+      pagerScrollOffset-Help: How many pixels above the first discussion or post to land when switching pages. A negative value lands below it.
       pagerPreview: Preview
       pageOfText: Page {page} of {total}
 
