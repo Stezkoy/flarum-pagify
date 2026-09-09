@@ -68,14 +68,19 @@
   }
 
   &-iconEdit {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     margin-top: 10px;
+    text-align: left;
 
-    label {
+    &Label {
       font-weight: bold;
-      white-space: nowrap;
+      margin-bottom: 6px;
+    }
+
+    &Row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .iconEditPreview {

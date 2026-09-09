@@ -39,6 +39,7 @@ return [
         ->default('stezkoy-pagify.pagerIconJump', '')
         ->default('stezkoy-pagify.mobileCompact', '')
         ->default('stezkoy-pagify.mobileSmall', '')
+        ->default('stezkoy-pagify.mobileButtonSize', 22)
         ->default('stezkoy-pagify.mobileHideJump', '')
         ->default('stezkoy-pagify.mobileHideCounter', '')
         ->serializeToForum('stezkoyPagify.enableDiscussionList', 'stezkoy-pagify.enableDiscussionList', fn ($value) => (bool) $value)
@@ -64,6 +65,7 @@ return [
         ->serializeToForum('stezkoyPagify.pagerIconJump', 'stezkoy-pagify.pagerIconJump')
         ->serializeToForum('stezkoyPagify.mobileCompact', 'stezkoy-pagify.mobileCompact', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.mobileSmall', 'stezkoy-pagify.mobileSmall', fn ($value) => (bool) $value)
+        ->serializeToForum('stezkoyPagify.mobileButtonSize', 'stezkoy-pagify.mobileButtonSize', fn ($value) => (int) $value)
         ->serializeToForum('stezkoyPagify.mobileHideJump', 'stezkoy-pagify.mobileHideJump', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.mobileHideCounter', 'stezkoy-pagify.mobileHideCounter', fn ($value) => (bool) $value),
 

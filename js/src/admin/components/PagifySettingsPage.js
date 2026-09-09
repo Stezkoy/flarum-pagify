@@ -140,6 +140,7 @@ export default class PagifySettingsPage extends ExtensionPage {
           this._pagerPreview(),
           this._iconEditor(),
         ]),
+        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerPreview-Help')),
       ]),
     ]);
   }
@@ -162,24 +163,36 @@ export default class PagifySettingsPage extends ExtensionPage {
     const icon = value || PAGER_ICON_DEFAULTS[key];
 
     return m('.PagifySettings-iconEdit', [
-      m('label', app.translator.trans(PREFIX + '.' + ICON_LABELS[key])),
-      m('i.iconEditPreview.fa-fw', { className: icon }),
-      m('input.FormControl', {
-        type: 'text',
-        value,
-        placeholder: PAGER_ICON_DEFAULTS[key],
-        oninput: (e) => {
-          this.setting(settingKey)(e.target.value.trim());
-          m.redraw();
-        },
-      }),
-      Button.component({
-        className: 'Button',
-        onclick: () => {
-          this.setting(settingKey)('');
-          m.redraw();
-        },
-      }, app.translator.trans(PREFIX + '.admin.settings.iconReset')),
+      m('.PagifySettings-iconEditLabel', app.translator.trans(PREFIX + '.' + ICON_LABELS[key])),
+      m('.PagifySettings-iconEditRow', [
+        m('i.iconEditPreview.fa-fw', { className: icon }),
+        m('input.FormControl', {
+          type: 'text',
+          value,
+          placeholder: PAGER_ICON_DEFAULTS[key],
+          oninput: (e) => {
+            this.setting(settingKey)(e.target.value.trim());
+            m.redraw();
+          },
+        }),
+        Button.component({
+          className: 'Button',
+          onclick: () => {
+            this.setting(settingKey)('');
+            m.redraw();
+          },
+        }, app.translator.trans(PREFIX + '.admin.settings.iconReset')),
+        Button.component({
+          className: 'Button Button--icon',
+          icon: 'fas fa-times',
+          title: app.translator.trans(PREFIX + '.admin.settings.iconClose'),
+          'aria-label': app.translator.trans(PREFIX + '.admin.settings.iconClose'),
+          onclick: () => {
+            this.iconEditing = null;
+            m.redraw();
+          },
+        }),
+      ]),
     ]);
   }
 
@@ -187,6 +200,17 @@ export default class PagifySettingsPage extends ExtensionPage {
     return this._section('admin.settings.mobile_heading', [
       this._toggle(PREFIX + '.mobileCompact', 'admin.settings.mobileCompact', 'admin.settings.mobileCompact-Help'),
       this._toggle(PREFIX + '.mobileSmall', 'admin.settings.mobileSmall', 'admin.settings.mobileSmall-Help'),
+      m('.Form-group', [
+        m('label', app.translator.trans(PREFIX + '.admin.settings.mobileButtonSize')),
+        m('input.FormControl', {
+          type: 'number',
+          min: 14,
+          max: 60,
+          disabled: !this._flagOn(PREFIX + '.mobileSmall'),
+          bidi: this.setting(PREFIX + '.mobileButtonSize'),
+        }),
+        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.mobileButtonSize-Help')),
+      ]),
       this._toggle(PREFIX + '.mobileHideJump', 'admin.settings.mobileHideJump', 'admin.settings.mobileHideJump-Help'),
       this._toggle(PREFIX + '.mobileHideCounter', 'admin.settings.mobileHideCounter', 'admin.settings.mobileHideCounter-Help'),
     ]);

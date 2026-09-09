@@ -121,7 +121,13 @@ export default class Pager extends Component {
     }
 
     return (
-      <nav className={classes} aria-label={this.attrs.ariaLabel || trans('forum.list.aria_label')}>
+      <nav
+        className={classes}
+        style={this.attrs.mobileSmall
+          ? '--pagify-mobile-size:' + (parseInt(this.attrs.mobileButtonSize, 10) || 22) + 'px'
+          : ''}
+        aria-label={this.attrs.ariaLabel || trans('forum.list.aria_label')}
+      >
         {items}
         {shownMode !== 'mini' && shownMode !== 'core' && this.attrs.counter ? (
           <span className="PagifyPager-counter">{trans('forum.list.pageOf', { page: current, total: totalPages })}</span>

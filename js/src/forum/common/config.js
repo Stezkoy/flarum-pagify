@@ -55,6 +55,11 @@ export function mobileSmall() {
   return !!app.forum.attribute('stezkoyPagify.mobileSmall');
 }
 
+export function mobileButtonSize() {
+  const value = parseInt(app.forum.attribute('stezkoyPagify.mobileButtonSize'));
+  return value >= 14 && value <= 60 ? value : 22;
+}
+
 export function mobileHideJump() {
   return !!app.forum.attribute('stezkoyPagify.mobileHideJump');
 }
