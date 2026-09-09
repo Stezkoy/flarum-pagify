@@ -25,6 +25,10 @@ return [
         ->default('stezkoy-pagify.paginationPosition', 'under')
         ->default('stezkoy-pagify.postStreamPosition', 'both')
         ->default('stezkoy-pagify.postListPosition', 'under')
+        ->default('stezkoy-pagify.pagerMode', 'full')
+        ->default('stezkoy-pagify.pagerWindow', 3)
+        ->default('stezkoy-pagify.pagerCounter', '')
+        ->default('stezkoy-pagify.pagerJump', '1')
         ->serializeToForum('stezkoyPagify.enableDiscussionList', 'stezkoy-pagify.enableDiscussionList', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.enablePostStream', 'stezkoy-pagify.enablePostStream', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.enablePostList', 'stezkoy-pagify.enablePostList', fn ($value) => (bool) $value)
@@ -33,7 +37,11 @@ return [
         ->serializeToForum('stezkoyPagify.postListPerPage', 'stezkoy-pagify.postListPerPage', fn ($value) => (int) $value)
         ->serializeToForum('stezkoyPagify.paginationPosition', 'stezkoy-pagify.paginationPosition')
         ->serializeToForum('stezkoyPagify.postStreamPosition', 'stezkoy-pagify.postStreamPosition')
-        ->serializeToForum('stezkoyPagify.postListPosition', 'stezkoy-pagify.postListPosition'),
+        ->serializeToForum('stezkoyPagify.postListPosition', 'stezkoy-pagify.postListPosition')
+        ->serializeToForum('stezkoyPagify.pagerMode', 'stezkoy-pagify.pagerMode')
+        ->serializeToForum('stezkoyPagify.pagerWindow', 'stezkoy-pagify.pagerWindow', fn ($value) => (int) $value)
+        ->serializeToForum('stezkoyPagify.pagerCounter', 'stezkoy-pagify.pagerCounter', fn ($value) => (bool) $value)
+        ->serializeToForum('stezkoyPagify.pagerJump', 'stezkoy-pagify.pagerJump', fn ($value) => (bool) $value),
 
     // API-мiddleware: в v2 браузер получает количество страниц/элементов уже в
     // meta.page.total, поэтому никаких кастомных count/serializer не нужно —

@@ -1,70 +1,41 @@
-import app from 'flarum/forum/app';
 import Button from 'flarum/common/components/Button';
 import Component from 'flarum/common/Component';
-
-const PREFIX = 'stezkoy-pagify';
 
 export default class Pager extends Component {
   view() {
     const state = this.attrs.state;
+    const trans = this.attrs.trans;
+    const mode = this.attrs.mode || 'full';
+    const windowSize = Math.max(1, parseInt(this.attrs.window, 10) || 3);
 
     const pageSize = state.pageSize || this.fallbackPerPage();
     const total = state.totalItems ?? this.payloadTotal(state) ?? 0;
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const current = Math.min(totalPages, state.getLocation().page || 1);
 
-    return (
-      <div className="PagifyPager">
-        <ul className="PagifyPager-list">
-          <li>
-            <Button
-              title={app.translator.trans(PREFIX + '.forum.list.first')}
-              icon="fas fa-angle-double-left"
-              className="Button Button--icon"
-              onclick={() => this.goto(state, 1)}
-              disabled={current === 1}
-            />
-          </li>
-          <li>
-            <Button
-              title={app.translator.trans(PREFIX + '.forum.list.previous')}
-              icon="fas fa-angle-left"
-              className="Button Button--icon"
-              onclick={() => this.goto(state, current - 1)}
-              disabled={current === 1}
-            />
-          </li>
-          {this.pageList(current, totalPages).map((page) => {
-            return (
-              <li>
-                <Button
-                  title={String(page)}
-                  className={page === current ? 'Button Button--primary Button--active' : 'Button'}
-                  onclick={() => this.goto(state, page)}
-                >
-                  {page}
-                </Button>
-              </li>
-            );
-          })}
-          <li>
-            <Button
-              title={app.translator.trans(PREFIX + '.forum.list.next')}
-              icon="fas fa-angle-right"
-              className="Button Button--icon"
-              onclick={() => this.goto(state, current + 1)}
-              disabled={current === totalPages}
-            />
-          </li>
-          <li>
-            <Button
-              title={app.translator.trans(PREFIX + '.forum.list.last')}
-              icon="fas fa-angle-double-right"
-              className="Button Button--icon"
-              onclick={() => this.goto(state, totalPages)}
-              disabled={current === totalPages}
-            />
-          </li>
+    const items = [];
+
+    if (mode === 'mini') {
+      items.push(this.navItem('fas fa-angle-left', current - 1, current === 1, 'forum.list.previous'));
+      items.push(<li className="PagifyPager-current">{current} / {totalPages}</li>);
+      items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
+    } else {
+      const pages = mode === 'compact'
+        ? this.compactPageList(current, totalPages, windowSize)
+        : this.pageList(current, totalPages, windowSize);
+
+      items.push(this.navItem('fas fa-angle-double-left', 1, current === 1, 'forum.list.first'));
+      items.push(this.navItem('fas fa-angle-left', current - 1, current === 1, 'forum.list.previous'));
+
+      for (const page of pages) {
+        items.push(page === '…' ? <li className="PagifyPager-ellipsis">…</li> : this.pageItem(page, current));
+      }
+
+      items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
+      items.push(this.navItem('fas fa-angle-double-right', totalPages, current === totalPages, 'forum.list.last'));
+
+      if (this.attrs.jump) {
+        items.push(
           <li className="PagifyPager-jump">
             <input
               className="FormControl"
@@ -73,8 +44,8 @@ export default class Pager extends Component {
               pattern="[0-9]*"
               maxLength={String(totalPages).length + 1}
               placeholder={String(current)}
-              aria-label={app.translator.trans(PREFIX + '.forum.list.jump')}
-              title={app.translator.trans(PREFIX + '.forum.list.jump')}
+              aria-label={trans('forum.list.jump')}
+              title={trans('forum.list.jump')}
               onkeydown={(event) => {
                 if (event.key === 'Enter') {
                   event.redraw = false;
@@ -82,17 +53,54 @@ export default class Pager extends Component {
                 }
               }}
             />
-          </li>
+          </li>,
           <li>
             <Button
-              title={app.translator.trans(PREFIX + '.forum.list.jump')}
+              title={trans('forum.list.jump')}
               icon="fas fa-arrow-right"
               className="Button Button--icon"
               onclick={() => this.jump(state, this.element.querySelector('input')?.value)}
             />
           </li>
-        </ul>
+        );
+      }
+    }
+
+    return (
+      <div className="PagifyPager">
+        <ul className="PagifyPager-list">{items}</ul>
+        {mode !== 'mini' && this.attrs.counter ? (
+          <div className="PagifyPager-counter">{trans('forum.list.pageOf', { page: current, total: totalPages })}</div>
+        ) : null}
       </div>
+    );
+  }
+
+  navItem(icon, page, disabled, key) {
+    return (
+      <li>
+        <Button
+          title={this.attrs.trans(key)}
+          icon={icon}
+          className="Button Button--icon"
+          onclick={() => this.goto(this.attrs.state, page)}
+          disabled={disabled}
+        />
+      </li>
+    );
+  }
+
+  pageItem(page, current) {
+    return (
+      <li>
+        <Button
+          title={String(page)}
+          className={page === current ? 'Button Button--primary Button--active' : 'Button'}
+          onclick={() => this.goto(this.attrs.state, page)}
+        >
+          {page}
+        </Button>
+      </li>
     );
   }
 
@@ -108,15 +116,28 @@ export default class Pager extends Component {
     return total != null ? parseInt(total, 10) : null;
   }
 
-  pageList(current, totalPages) {
-    const edge = 3;
+  pageList(current, totalPages, windowSize) {
     const pages = [];
-    const left = Math.max(1, current - edge);
-    const right = Math.min(totalPages, current + edge);
+    const left = Math.max(1, current - windowSize);
+    const right = Math.min(totalPages, current + windowSize);
 
     for (let i = left; i <= right; i++) pages.push(i);
 
     return pages;
+  }
+
+  compactPageList(current, totalPages, windowSize) {
+    const items = [];
+    const left = Math.max(2, current - windowSize);
+    const right = Math.min(totalPages - 1, current + windowSize);
+
+    items.push(1);
+    if (left > 2) items.push('…');
+    for (let i = left; i <= right; i++) items.push(i);
+    if (right < totalPages - 1) items.push('…');
+    if (totalPages > 1) items.push(totalPages);
+
+    return items;
   }
 
   goto(state, page) {

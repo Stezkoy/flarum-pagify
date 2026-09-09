@@ -9,6 +9,7 @@ import classList from 'flarum/common/utils/classList';
 
 import Pager from '../common/Pager';
 import { listEnabled, perPage, position } from './config';
+import { pagerMode, pagerWindow, pagerCounter, pagerJump, pagerTrans } from '../common/config';
 
 export default function overrideDiscussionList() {
   override(DiscussionListState.prototype, 'loadPage', function (original, page) {
@@ -77,7 +78,16 @@ export default function overrideDiscussionList() {
 
     const pos = position();
 
-    const pager = () => Pager.component({ state, perPage, scrollSelector: '.DiscussionList' });
+    const pager = () => Pager.component({
+      state,
+      perPage,
+      scrollSelector: '.DiscussionList',
+      trans: pagerTrans,
+      mode: pagerMode(),
+      window: pagerWindow(),
+      counter: pagerCounter(),
+      jump: pagerJump(),
+    });
 
     return (
       <div className={classList('DiscussionList', { 'DiscussionList--searchResults': state.isSearchResults() })}>

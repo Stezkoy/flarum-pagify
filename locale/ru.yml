@@ -22,6 +22,20 @@ stezkoy-pagify:
       postListPerPage-Help: Сколько постов показывать на странице ленты. Без пагинации задаёт размер порции «Показать ещё».
       postListPosition: Позиция пагинации
 
+      pager_heading: Пейджер
+      pagerMode: Режим
+      pagerMode-Help: Полный — номера страниц и поле перехода, компактный — крайние страницы и меньше номеров, мини — только стрелки и текущая позиция.
+      pager_mode_full: Полный
+      pager_mode_compact: Компактный
+      pager_mode_mini: Мини
+      pagerWindow: Страниц вокруг текущей
+      pagerWindow-Help: Сколько номеров страниц показывать по обе стороны от текущей.
+      pagerCounter: Показывать «Страница X из Y»
+      pagerCounter-Help: Текущая страница и общее количество под пейджером.
+      pagerJump: Поле перехода к странице
+      pagerJump-Help: Поле ввода номера страницы рядом с пейджером (только в полном режиме).
+      pagerPreview: Предпросмотр
+
       position:
         above: Сверху
         under: Снизу
@@ -34,6 +48,7 @@ stezkoy-pagify:
       next: Следующая страница
       last: Последняя страница
       jump: Перейти к странице
+      pageOf: Страница {page} из {total}
     post_stream:
       aria_label: Страницы постов
       first: Первая страница

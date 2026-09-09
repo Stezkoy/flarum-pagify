@@ -22,6 +22,20 @@ stezkoy-pagify:
       postListPerPage-Help: How many posts to show per feed page. Without pagination it sizes each "Load More" batch.
       postListPosition: Pager position
 
+      pager_heading: Pager
+      pagerMode: Mode
+      pagerMode-Help: Full shows page numbers with a jump field, compact trims the numbers, mini shows only arrows and the current position.
+      pager_mode_full: Full
+      pager_mode_compact: Compact
+      pager_mode_mini: Mini
+      pagerWindow: Pages around the current one
+      pagerWindow-Help: How many page numbers to show on each side of the current page.
+      pagerCounter: Show "Page X of Y"
+      pagerCounter-Help: Display the current page and the total under the pager.
+      pagerJump: Jump-to-page field
+      pagerJump-Help: Show the page-number input next to the pager (full mode only).
+      pagerPreview: Preview
+
       position:
         above: Above
         under: Below
@@ -34,6 +48,7 @@ stezkoy-pagify:
       next: Next page
       last: Last page
       jump: Jump to page
+      pageOf: Page {page} of {total}
     post_stream:
       aria_label: Post pages
       first: First page

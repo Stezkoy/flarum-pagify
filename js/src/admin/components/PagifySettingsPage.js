@@ -1,6 +1,8 @@
 import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Switch from 'flarum/common/components/Switch';
 
+import Pager from '../../forum/common/Pager';
+
 const PREFIX = 'stezkoy-pagify';
 
 export default class PagifySettingsPage extends ExtensionPage {
@@ -10,6 +12,7 @@ export default class PagifySettingsPage extends ExtensionPage {
         this._discussionListSection(),
         this._postStreamSection(),
         this._postListSection(),
+        this._pagerSection(),
         m('.Form-group.Form-controls', this.submitButton()),
       ]),
     ]));
@@ -78,6 +81,63 @@ export default class PagifySettingsPage extends ExtensionPage {
         m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.postListPerPage-Help')),
       ]),
     ]);
+  }
+
+  _pagerSection() {
+    return this._section('admin.settings.pager_heading', [
+      m('.Form-group', [
+        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerMode')),
+        m('select.FormControl', {
+          value: this.setting(PREFIX + '.pagerMode')(),
+          onchange: (e) => {
+            this.setting(PREFIX + '.pagerMode')(e.target.value);
+            m.redraw();
+          },
+        }, [
+          m('option', { value: 'full' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_full')),
+          m('option', { value: 'compact' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_compact')),
+          m('option', { value: 'mini' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_mini')),
+        ]),
+        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerMode-Help')),
+      ]),
+      m('.Form-group', [
+        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerWindow')),
+        m('input.FormControl', {
+          type: 'number',
+          min: 1,
+          max: 10,
+          bidi: this.setting(PREFIX + '.pagerWindow'),
+        }),
+        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerWindow-Help')),
+      ]),
+      this._toggle(PREFIX + '.pagerCounter', 'admin.settings.pagerCounter', 'admin.settings.pagerCounter-Help'),
+      this._toggle(PREFIX + '.pagerJump', 'admin.settings.pagerJump', 'admin.settings.pagerJump-Help'),
+      m('.Form-group', [
+        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerPreview')),
+        m('.PagifySettings-preview', this._pagerPreview()),
+      ]),
+    ]);
+  }
+
+  _pagerPreview() {
+    const state = {
+      pageSize: 20,
+      totalItems: 500,
+      getLocation: () => ({ page: 12 }),
+      goto: () => Promise.resolve(),
+      getPages: () => [],
+    };
+
+    return Pager.component({
+      state,
+      perPage: () => 20,
+      trans: (key, params) => app.translator.trans(PREFIX + '.' + key, params),
+      mode: this.setting(PREFIX + '.pagerMode')() || 'full',
+      window: this.setting(PREFIX + '.pagerWindow')(),
+      counter: this._flagOn(PREFIX + '.pagerCounter'),
+      jump: this._flagOn(PREFIX + '.pagerJump'),
+      scrollSelector: '.PagifySettings',
+    });
   }
 
   _positionField(key, labelKey, disabled = false) {
