@@ -1,9 +1,17 @@
 import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Switch from 'flarum/common/components/Switch';
+import Button from 'flarum/common/components/Button';
 
-import Pager from '../../forum/common/Pager';
+import Pager, { PAGER_ICON_DEFAULTS } from '../../forum/common/Pager';
 
 const PREFIX = 'stezkoy-pagify';
+
+// The admin locale bundle only carries admin.* keys — mirror the forum pager
+// strings used by the live preview.
+const MIRRORED_PREVIEW_KEYS = {
+  'forum.list.pageOf': 'admin.settings.pageOfText',
+  'forum.list.pageInput': 'admin.settings.pageInputText',
+};
 
 export default class PagifySettingsPage extends ExtensionPage {
   content() {
@@ -13,6 +21,7 @@ export default class PagifySettingsPage extends ExtensionPage {
         this._postStreamSection(),
         this._postListSection(),
         this._pagerSection(),
+        this._mobileSection(),
         m('.Form-group.Form-controls', this.submitButton()),
       ]),
     ]));
@@ -127,8 +136,59 @@ export default class PagifySettingsPage extends ExtensionPage {
       ]),
       m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.pagerPreview')),
-        m('.PagifySettings-preview', this._pagerPreview()),
+        m('.PagifySettings-preview', [
+          this._pagerPreview(),
+          this._iconEditor(),
+        ]),
       ]),
+    ]);
+  }
+
+  _iconEditor() {
+    const ICON_LABELS = {
+      first: 'admin.settings.iconFirst',
+      prev: 'admin.settings.iconPrev',
+      next: 'admin.settings.iconNext',
+      last: 'admin.settings.iconLast',
+      jump: 'admin.settings.iconJump',
+    };
+
+    const key = this.iconEditing;
+
+    if (!key || !ICON_LABELS[key]) return null;
+
+    const settingKey = PREFIX + '.pagerIcon' + key[0].toUpperCase() + key.slice(1);
+    const value = (this.setting(settingKey)() || '').trim();
+    const icon = value || PAGER_ICON_DEFAULTS[key];
+
+    return m('.PagifySettings-iconEdit', [
+      m('label', app.translator.trans(PREFIX + '.' + ICON_LABELS[key])),
+      m('i.iconEditPreview.fa-fw', { className: icon }),
+      m('input.FormControl', {
+        type: 'text',
+        value,
+        placeholder: PAGER_ICON_DEFAULTS[key],
+        oninput: (e) => {
+          this.setting(settingKey)(e.target.value.trim());
+          m.redraw();
+        },
+      }),
+      Button.component({
+        className: 'Button',
+        onclick: () => {
+          this.setting(settingKey)('');
+          m.redraw();
+        },
+      }, app.translator.trans(PREFIX + '.admin.settings.iconReset')),
+    ]);
+  }
+
+  _mobileSection() {
+    return this._section('admin.settings.mobile_heading', [
+      this._toggle(PREFIX + '.mobileCompact', 'admin.settings.mobileCompact', 'admin.settings.mobileCompact-Help'),
+      this._toggle(PREFIX + '.mobileSmall', 'admin.settings.mobileSmall', 'admin.settings.mobileSmall-Help'),
+      this._toggle(PREFIX + '.mobileHideJump', 'admin.settings.mobileHideJump', 'admin.settings.mobileHideJump-Help'),
+      this._toggle(PREFIX + '.mobileHideCounter', 'admin.settings.mobileHideCounter', 'admin.settings.mobileHideCounter-Help'),
     ]);
   }
 
@@ -144,7 +204,7 @@ export default class PagifySettingsPage extends ExtensionPage {
     return Pager.component({
       state,
       perPage: () => 20,
-      trans: (key, params) => app.translator.trans(PREFIX + '.' + (key === 'forum.list.pageOf' ? 'admin.settings.pageOfText' : key), params),
+      trans: (key, params) => app.translator.trans(PREFIX + '.' + (MIRRORED_PREVIEW_KEYS[key] || key), params),
       mode: this.setting(PREFIX + '.pagerMode')() || 'full',
       window: this.setting(PREFIX + '.pagerWindow')(),
       counter: this._flagOn(PREFIX + '.pagerCounter'),
@@ -152,6 +212,17 @@ export default class PagifySettingsPage extends ExtensionPage {
         this._flagOn(PREFIX + '.pagerJumpList') ||
         this._flagOn(PREFIX + '.pagerJumpStream') ||
         this._flagOn(PREFIX + '.pagerJumpFeed'),
+      icons: {
+        first: (this.setting(PREFIX + '.pagerIconFirst')() || '').trim() || null,
+        prev: (this.setting(PREFIX + '.pagerIconPrev')() || '').trim() || null,
+        next: (this.setting(PREFIX + '.pagerIconNext')() || '').trim() || null,
+        last: (this.setting(PREFIX + '.pagerIconLast')() || '').trim() || null,
+        jump: (this.setting(PREFIX + '.pagerIconJump')() || '').trim() || null,
+      },
+      onIconClick: (key) => {
+        this.iconEditing = key;
+        m.redraw();
+      },
       scrollSelector: '.PagifySettings',
     });
   }

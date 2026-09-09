@@ -58,6 +58,39 @@
     .PagifyPager {
       pointer-events: none;
       margin: 0;
+
+      // Only the icon buttons open the icon editor.
+      .Button--icon {
+        pointer-events: auto;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &-iconEdit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+
+    label {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .iconEditPreview {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed var(--muted-color);
+      border-radius: var(--border-radius);
+      flex-shrink: 0;
+    }
+
+    .FormControl {
+      max-width: 280px;
     }
   }
 }

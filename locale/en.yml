@@ -43,6 +43,23 @@ stezkoy-pagify:
       pagerScrollOffset-Help: How many pixels above the first discussion or post to land when switching pages. A negative value lands below it.
       pagerPreview: Preview
       pageOfText: Page {page} of {total}
+      pageInputText: Page {input} of {total}
+      iconFirst: Icon — first page
+      iconPrev: Icon — previous page
+      iconNext: Icon — next page
+      iconLast: Icon — last page
+      iconJump: Icon — jump button
+      iconReset: Reset
+
+      mobile_heading: Mobile View
+      mobileCompact: Mini pager on mobile
+      mobileCompact-Help: On phones the pager turns into the mini one — arrows and the current position only.
+      mobileSmall: Smaller buttons
+      mobileSmall-Help: 22×22 pager buttons instead of 36×36 on phones.
+      mobileHideJump: Hide the jump field
+      mobileHideJump-Help: Do not show the page-number input on phones.
+      mobileHideCounter: Hide the counter
+      mobileHideCounter-Help: Do not show "Page X of Y" on phones.
 
       position:
         above: Above

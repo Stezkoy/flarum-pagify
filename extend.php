@@ -32,6 +32,15 @@ return [
         ->default('stezkoy-pagify.pagerJumpStream', '1')
         ->default('stezkoy-pagify.pagerJumpFeed', '1')
         ->default('stezkoy-pagify.pagerScrollOffset', 80)
+        ->default('stezkoy-pagify.pagerIconFirst', '')
+        ->default('stezkoy-pagify.pagerIconPrev', '')
+        ->default('stezkoy-pagify.pagerIconNext', '')
+        ->default('stezkoy-pagify.pagerIconLast', '')
+        ->default('stezkoy-pagify.pagerIconJump', '')
+        ->default('stezkoy-pagify.mobileCompact', '')
+        ->default('stezkoy-pagify.mobileSmall', '')
+        ->default('stezkoy-pagify.mobileHideJump', '')
+        ->default('stezkoy-pagify.mobileHideCounter', '')
         ->serializeToForum('stezkoyPagify.enableDiscussionList', 'stezkoy-pagify.enableDiscussionList', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.enablePostStream', 'stezkoy-pagify.enablePostStream', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.enablePostList', 'stezkoy-pagify.enablePostList', fn ($value) => (bool) $value)
@@ -47,7 +56,16 @@ return [
         ->serializeToForum('stezkoyPagify.pagerJumpList', 'stezkoy-pagify.pagerJumpList', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.pagerJumpStream', 'stezkoy-pagify.pagerJumpStream', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.pagerJumpFeed', 'stezkoy-pagify.pagerJumpFeed', fn ($value) => (bool) $value)
-        ->serializeToForum('stezkoyPagify.pagerScrollOffset', 'stezkoy-pagify.pagerScrollOffset', fn ($value) => (int) $value),
+        ->serializeToForum('stezkoyPagify.pagerScrollOffset', 'stezkoy-pagify.pagerScrollOffset', fn ($value) => (int) $value)
+        ->serializeToForum('stezkoyPagify.pagerIconFirst', 'stezkoy-pagify.pagerIconFirst')
+        ->serializeToForum('stezkoyPagify.pagerIconPrev', 'stezkoy-pagify.pagerIconPrev')
+        ->serializeToForum('stezkoyPagify.pagerIconNext', 'stezkoy-pagify.pagerIconNext')
+        ->serializeToForum('stezkoyPagify.pagerIconLast', 'stezkoy-pagify.pagerIconLast')
+        ->serializeToForum('stezkoyPagify.pagerIconJump', 'stezkoy-pagify.pagerIconJump')
+        ->serializeToForum('stezkoyPagify.mobileCompact', 'stezkoy-pagify.mobileCompact', fn ($value) => (bool) $value)
+        ->serializeToForum('stezkoyPagify.mobileSmall', 'stezkoy-pagify.mobileSmall', fn ($value) => (bool) $value)
+        ->serializeToForum('stezkoyPagify.mobileHideJump', 'stezkoy-pagify.mobileHideJump', fn ($value) => (bool) $value)
+        ->serializeToForum('stezkoyPagify.mobileHideCounter', 'stezkoy-pagify.mobileHideCounter', fn ($value) => (bool) $value),
 
     // API-мiddleware: в v2 браузер получает количество страниц/элементов уже в
     // meta.page.total, поэтому никаких кастомных count/serializer не нужно —

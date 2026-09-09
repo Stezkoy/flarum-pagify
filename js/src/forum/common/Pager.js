@@ -1,27 +1,45 @@
 import Button from 'flarum/common/components/Button';
 import Component from 'flarum/common/Component';
+import { isPhone } from './config';
+
+export const PAGER_ICON_DEFAULTS = {
+  first: 'fas fa-step-backward',
+  prev: 'fas fa-chevron-left',
+  next: 'fas fa-chevron-right',
+  last: 'fas fa-step-forward',
+  jump: 'fas fa-arrow-right',
+};
 
 export default class Pager extends Component {
   view() {
     const state = this.attrs.state;
     const trans = this.attrs.trans;
+    const icons = this.attrs.icons || {};
     const mode = this.attrs.mode || 'full';
     const windowSize = Math.max(1, parseInt(this.attrs.window, 10) || 3);
+    const shownMode = this.attrs.mobileCompact && isPhone() ? 'mini' : mode;
 
     const pageSize = state.pageSize || this.fallbackPerPage();
     const total = state.totalItems ?? this.payloadTotal(state) ?? 0;
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const current = Math.min(totalPages, state.getLocation().page || 1);
 
+    const classes = [
+      'PagifyPager',
+      this.attrs.mobileSmall ? 'pagifySmall' : '',
+      this.attrs.mobileHideJump ? 'pagifyHideJump' : '',
+      this.attrs.mobileHideCounter ? 'pagifyHideCounter' : '',
+    ].filter(Boolean).join(' ');
+
     const items = [];
 
-    if (mode === 'mini') {
-      items.push(this.navItem('fas fa-chevron-left', current - 1, current === 1, 'forum.list.previous'));
+    if (shownMode === 'mini') {
+      items.push(this.navItem('prev', current - 1, current === 1, 'forum.list.previous'));
       items.push(<span className="PagifyPager-current">{current} / {totalPages}</span>);
-      items.push(this.navItem('fas fa-chevron-right', current + 1, current === totalPages, 'forum.list.next'));
-    } else if (mode === 'core') {
-      items.push(this.navItem('fas fa-step-backward', 1, current === 1, 'forum.list.first'));
-      items.push(this.navItem('fas fa-chevron-left', current - 1, current === 1, 'forum.list.previous'));
+      items.push(this.navItem('next', current + 1, current === totalPages, 'forum.list.next'));
+    } else if (shownMode === 'core') {
+      items.push(this.navItem('first', 1, current === 1, 'forum.list.first'));
+      items.push(this.navItem('prev', current - 1, current === 1, 'forum.list.previous'));
       items.push(
         <span className="PagifyPager-core">
           {trans('forum.list.pageInput', {
@@ -54,25 +72,25 @@ export default class Pager extends Component {
           })}
         </span>
       );
-      items.push(this.navItem('fas fa-chevron-right', current + 1, current === totalPages, 'forum.list.next'));
-      items.push(this.navItem('fas fa-step-forward', totalPages, current === totalPages, 'forum.list.last'));
+      items.push(this.navItem('next', current + 1, current === totalPages, 'forum.list.next'));
+      items.push(this.navItem('last', totalPages, current === totalPages, 'forum.list.last'));
     } else {
-      const pages = mode === 'compact'
+      const pages = shownMode === 'compact'
         ? this.pageList(current, totalPages, windowSize)
         : this.compactPageList(current, totalPages, windowSize);
 
-      items.push(this.navItem('fas fa-step-backward', 1, current === 1, 'forum.list.first'));
-      items.push(this.navItem('fas fa-chevron-left', current - 1, current === 1, 'forum.list.previous'));
+      items.push(this.navItem('first', 1, current === 1, 'forum.list.first'));
+      items.push(this.navItem('prev', current - 1, current === 1, 'forum.list.previous'));
 
       for (const page of pages) {
         items.push(page === '…' ? <span className="PagifyPager-ellipsis">…</span> : this.pageItem(page, current));
       }
 
-      items.push(this.navItem('fas fa-chevron-right', current + 1, current === totalPages, 'forum.list.next'));
-      items.push(this.navItem('fas fa-step-forward', totalPages, current === totalPages, 'forum.list.last'));
+      items.push(this.navItem('next', current + 1, current === totalPages, 'forum.list.next'));
+      items.push(this.navItem('last', totalPages, current === totalPages, 'forum.list.last'));
     }
 
-    if (this.attrs.jump && mode !== 'core') {
+    if (this.attrs.jump && shownMode !== 'core') {
       items.push(
         <span className="PagifyPager-jump">
           <input
@@ -94,35 +112,44 @@ export default class Pager extends Component {
           <Button
             title={trans('forum.list.jump')}
             aria-label={trans('forum.list.jump')}
-            icon="fas fa-arrow-right"
+            icon={icons.jump || PAGER_ICON_DEFAULTS.jump}
             className="Button Button--icon PagifyPager-jumpGo"
-            onclick={() => this.jump(state, this.element.querySelector('input')?.value)}
+            onclick={() => this.onNavClick('jump', () => this.jump(state, this.element.querySelector('input')?.value))}
           />
         </span>
       );
     }
 
     return (
-      <nav className="PagifyPager" aria-label={this.attrs.ariaLabel || trans('forum.list.aria_label')}>
+      <nav className={classes} aria-label={this.attrs.ariaLabel || trans('forum.list.aria_label')}>
         {items}
-        {mode !== 'mini' && mode !== 'core' && this.attrs.counter ? (
+        {shownMode !== 'mini' && shownMode !== 'core' && this.attrs.counter ? (
           <span className="PagifyPager-counter">{trans('forum.list.pageOf', { page: current, total: totalPages })}</span>
         ) : null}
       </nav>
     );
   }
 
-  navItem(icon, page, disabled, key) {
+  navItem(key, page, disabled, labelKey) {
     return (
       <Button
-        title={this.attrs.trans(key)}
-        aria-label={this.attrs.trans(key)}
-        icon={icon}
+        title={this.attrs.trans(labelKey)}
+        aria-label={this.attrs.trans(labelKey)}
+        icon={this.attrs.icons?.[key] || PAGER_ICON_DEFAULTS[key]}
         className="Button Button--icon"
-        onclick={() => this.goto(this.attrs.state, page)}
+        onclick={() => this.onNavClick(key, () => this.goto(this.attrs.state, page))}
         disabled={disabled}
       />
     );
+  }
+
+  onNavClick(key, fallback) {
+    if (this.attrs.onIconClick) {
+      this.attrs.onIconClick(key);
+      return;
+    }
+
+    fallback();
   }
 
   pageItem(page, current) {

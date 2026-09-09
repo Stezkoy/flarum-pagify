@@ -11,6 +11,9 @@ app.initializers.add('stezkoy-pagify', () => {
   overrideDiscussionPage();
   overridePostList();
 
+  // Redraw when the phone breakpoint flips so mobile pager settings apply live.
+  window.matchMedia('(max-width: 767px)').addEventListener('change', () => m.redraw());
+
   extend(DiscussionControls, 'deleteAction', function () {
     if (!app.forum.attribute('stezkoyPagify.enableDiscussionList')) return;
     if (app.discussions) {

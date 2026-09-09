@@ -43,6 +43,23 @@ stezkoy-pagify:
       pagerScrollOffset-Help: На сколько пикселей выше первой темы или поста поднимать страницу при переходе. Отрицательное значение — ниже первой темы.
       pagerPreview: Предпросмотр
       pageOfText: Страница {page} из {total}
+      pageInputText: Страница {input} из {total}
+      iconFirst: Иконка — первая страница
+      iconPrev: Иконка — предыдущая страница
+      iconNext: Иконка — следующая страница
+      iconLast: Иконка — последняя страница
+      iconJump: Иконка — кнопка перехода
+      iconReset: Сбросить
+
+      mobile_heading: Мобильный вид
+      mobileCompact: Мини-пейджер на мобильных
+      mobileCompact-Help: На телефонах пейджер превращается в мини — только стрелки и текущая позиция.
+      mobileSmall: Уменьшенные кнопки
+      mobileSmall-Help: Кнопки пейджера 22×22 вместо 36×36 на телефонах.
+      mobileHideJump: Скрывать поле перехода
+      mobileHideJump-Help: Не показывать поле ввода номера страницы на телефонах.
+      mobileHideCounter: Скрывать счётчик
+      mobileHideCounter-Help: Не показывать «Страница X из Y» на телефонах.
 
       position:
         above: Сверху

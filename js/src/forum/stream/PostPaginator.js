@@ -3,7 +3,7 @@ import Component from 'flarum/common/Component';
 import goToPage from './goToPage';
 import Pager from '../common/Pager';
 import { postsPerPage, streamEnabled } from './config';
-import { pagerMode, pagerWindow, pagerCounter, pagerJumpStream, pagerTrans } from '../common/config';
+import { pagerMode, pagerWindow, pagerCounter, pagerJumpStream, pagerIcons, mobileCompact, mobileSmall, mobileHideJump, mobileHideCounter, pagerTrans } from '../common/config';
 
 export default class PostPaginator extends Component {
   view() {
@@ -38,6 +38,11 @@ export default class PostPaginator extends Component {
         jump={pagerJumpStream()}
         scroll={false}
         ariaLabel={pagerTrans('forum.post_stream.aria_label')}
+        icons={pagerIcons()}
+        mobileCompact={mobileCompact()}
+        mobileSmall={mobileSmall()}
+        mobileHideJump={mobileHideJump()}
+        mobileHideCounter={mobileHideCounter()}
       />
     );
   }
