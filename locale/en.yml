@@ -50,6 +50,7 @@ stezkoy-pagify:
 
   forum:
     list:
+      aria_label: Pagination
       first: First page
       previous: Previous page
       next: Next page

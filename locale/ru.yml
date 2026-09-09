@@ -50,6 +50,7 @@ stezkoy-pagify:
 
   forum:
     list:
+      aria_label: Постраничная навигация
       first: Первая страница
       previous: Предыдущая страница
       next: Следующая страница

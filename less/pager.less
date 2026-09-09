@@ -1,24 +1,13 @@
 .PagifyPager {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   margin-top: 24px;
   margin-bottom: 24px;
   padding: 8px 10px;
   text-align: center;
-
-  &-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
-
-  .Button {
-    margin-bottom: 4px;
-    margin-top: 4px;
-  }
 
   .Button:not(.Button--icon) {
     min-width: 36px;
@@ -35,11 +24,12 @@
   }
 
   &-jump {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     margin-left: 8px;
 
     input {
-      margin-bottom: 4px;
-      margin-top: 4px;
       color: var(--button-color);
       background: var(--button-bg);
       text-align: center;
@@ -86,8 +76,6 @@
     font-weight: bold;
     letter-spacing: 2px;
     opacity: 0.65;
-    margin-bottom: 4px;
-    margin-top: 4px;
     user-select: none;
   }
 
@@ -96,10 +84,11 @@
     font-weight: bold;
     height: 36px;
     line-height: 36px;
-    margin: 4px 8px;
+    margin: 0 8px;
   }
 
   &-counter {
+    width: 100%;
     color: var(--muted-color);
     font-size: 12px;
     margin-top: 6px;

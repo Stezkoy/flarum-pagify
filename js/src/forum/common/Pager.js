@@ -16,28 +16,28 @@ export default class Pager extends Component {
     const items = [];
 
     if (mode === 'mini') {
-      items.push(this.navItem('fas fa-angle-left', current - 1, current === 1, 'forum.list.previous'));
-      items.push(<li className="PagifyPager-current">{current} / {totalPages}</li>);
-      items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
+      items.push(this.navItem('fas fa-chevron-left', current - 1, current === 1, 'forum.list.previous'));
+      items.push(<span className="PagifyPager-current">{current} / {totalPages}</span>);
+      items.push(this.navItem('fas fa-chevron-right', current + 1, current === totalPages, 'forum.list.next'));
     } else {
       const pages = mode === 'compact'
         ? this.pageList(current, totalPages, windowSize)
         : this.compactPageList(current, totalPages, windowSize);
 
-      items.push(this.navItem('fas fa-angle-double-left', 1, current === 1, 'forum.list.first'));
-      items.push(this.navItem('fas fa-angle-left', current - 1, current === 1, 'forum.list.previous'));
+      items.push(this.navItem('fas fa-step-backward', 1, current === 1, 'forum.list.first'));
+      items.push(this.navItem('fas fa-chevron-left', current - 1, current === 1, 'forum.list.previous'));
 
       for (const page of pages) {
-        items.push(page === '…' ? <li className="PagifyPager-ellipsis">…</li> : this.pageItem(page, current));
+        items.push(page === '…' ? <span className="PagifyPager-ellipsis">…</span> : this.pageItem(page, current));
       }
 
-      items.push(this.navItem('fas fa-angle-right', current + 1, current === totalPages, 'forum.list.next'));
-      items.push(this.navItem('fas fa-angle-double-right', totalPages, current === totalPages, 'forum.list.last'));
+      items.push(this.navItem('fas fa-chevron-right', current + 1, current === totalPages, 'forum.list.next'));
+      items.push(this.navItem('fas fa-step-forward', totalPages, current === totalPages, 'forum.list.last'));
     }
 
     if (this.attrs.jump) {
       items.push(
-        <li className="PagifyPager-jump">
+        <span className="PagifyPager-jump">
           <input
             className="FormControl"
             type="text"
@@ -46,7 +46,7 @@ export default class Pager extends Component {
             maxLength={String(totalPages).length + 1}
             placeholder={String(current)}
             aria-label={trans('forum.list.jump')}
-            title={trans('forum.list.jump')}
+            autocomplete="off"
             onkeydown={(event) => {
               if (event.key === 'Enter') {
                 event.redraw = false;
@@ -54,53 +54,51 @@ export default class Pager extends Component {
               }
             }}
           />
-        </li>,
-        <li>
           <Button
             title={trans('forum.list.jump')}
+            aria-label={trans('forum.list.jump')}
             icon="fas fa-arrow-right"
-            className="Button Button--icon"
+            className="Button Button--icon PagifyPager-jumpGo"
             onclick={() => this.jump(state, this.element.querySelector('input')?.value)}
           />
-        </li>
+        </span>
       );
     }
 
     return (
-      <div className="PagifyPager" aria-label={this.attrs.ariaLabel}>
-        <ul className="PagifyPager-list">{items}</ul>
+      <nav className="PagifyPager" aria-label={this.attrs.ariaLabel || trans('forum.list.aria_label')}>
+        {items}
         {mode !== 'mini' && this.attrs.counter ? (
-          <div className="PagifyPager-counter">{trans('forum.list.pageOf', { page: current, total: totalPages })}</div>
+          <span className="PagifyPager-counter">{trans('forum.list.pageOf', { page: current, total: totalPages })}</span>
         ) : null}
-      </div>
+      </nav>
     );
   }
 
   navItem(icon, page, disabled, key) {
     return (
-      <li>
-        <Button
-          title={this.attrs.trans(key)}
-          icon={icon}
-          className="Button Button--icon"
-          onclick={() => this.goto(this.attrs.state, page)}
-          disabled={disabled}
-        />
-      </li>
+      <Button
+        title={this.attrs.trans(key)}
+        aria-label={this.attrs.trans(key)}
+        icon={icon}
+        className="Button Button--icon"
+        onclick={() => this.goto(this.attrs.state, page)}
+        disabled={disabled}
+      />
     );
   }
 
   pageItem(page, current) {
     return (
-      <li>
-        <Button
-          title={String(page)}
-          className={page === current ? 'Button Button--primary Button--active' : 'Button'}
-          onclick={() => this.goto(this.attrs.state, page)}
-        >
-          {page}
-        </Button>
-      </li>
+      <Button
+        title={String(page)}
+        aria-label={String(page)}
+        aria-current={page === current ? 'page' : undefined}
+        className={page === current ? 'Button Button--primary Button--active' : 'Button'}
+        onclick={() => this.goto(this.attrs.state, page)}
+      >
+        {page}
+      </Button>
     );
   }
 
