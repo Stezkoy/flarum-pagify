@@ -115,6 +115,16 @@ export default class PagifySettingsPage extends ExtensionPage {
       this._toggle(PREFIX + '.pagerJumpStream', 'admin.settings.pagerJumpStream', 'admin.settings.pagerJumpStream-Help'),
       this._toggle(PREFIX + '.pagerJumpFeed', 'admin.settings.pagerJumpFeed', 'admin.settings.pagerJumpFeed-Help'),
       m('.Form-group', [
+        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerScrollOffset')),
+        m('input.FormControl', {
+          type: 'number',
+          min: 0,
+          max: 500,
+          bidi: this.setting(PREFIX + '.pagerScrollOffset'),
+        }),
+        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerScrollOffset-Help')),
+      ]),
+      m('.Form-group', [
         m('label', app.translator.trans(PREFIX + '.admin.settings.pagerPreview')),
         m('.PagifySettings-preview', this._pagerPreview()),
       ]),

@@ -31,6 +31,7 @@ return [
         ->default('stezkoy-pagify.pagerJumpList', '1')
         ->default('stezkoy-pagify.pagerJumpStream', '1')
         ->default('stezkoy-pagify.pagerJumpFeed', '1')
+        ->default('stezkoy-pagify.pagerScrollOffset', 80)
         ->serializeToForum('stezkoyPagify.enableDiscussionList', 'stezkoy-pagify.enableDiscussionList', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.enablePostStream', 'stezkoy-pagify.enablePostStream', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.enablePostList', 'stezkoy-pagify.enablePostList', fn ($value) => (bool) $value)
@@ -45,7 +46,8 @@ return [
         ->serializeToForum('stezkoyPagify.pagerCounter', 'stezkoy-pagify.pagerCounter', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.pagerJumpList', 'stezkoy-pagify.pagerJumpList', fn ($value) => (bool) $value)
         ->serializeToForum('stezkoyPagify.pagerJumpStream', 'stezkoy-pagify.pagerJumpStream', fn ($value) => (bool) $value)
-        ->serializeToForum('stezkoyPagify.pagerJumpFeed', 'stezkoy-pagify.pagerJumpFeed', fn ($value) => (bool) $value),
+        ->serializeToForum('stezkoyPagify.pagerJumpFeed', 'stezkoy-pagify.pagerJumpFeed', fn ($value) => (bool) $value)
+        ->serializeToForum('stezkoyPagify.pagerScrollOffset', 'stezkoy-pagify.pagerScrollOffset', fn ($value) => (int) $value),
 
     // API-мiddleware: в v2 браузер получает количество страниц/элементов уже в
     // meta.page.total, поэтому никаких кастомных count/serializer не нужно —

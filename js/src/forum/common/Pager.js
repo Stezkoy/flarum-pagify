@@ -168,9 +168,11 @@ export default class Pager extends Component {
         || document.querySelector('.Page-content');
       const header = document.getElementById('header');
       const offsetY = header ? header.clientHeight : 0;
+      const scrollOffset = parseInt(this.attrs.scrollOffset, 10);
+      const extra = Number.isFinite(scrollOffset) ? scrollOffset : 80;
 
       if (list) {
-        const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY - 80;
+        const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY - extra;
         window.scrollTo({ top: targetPosition, behavior: 'smooth' });
       }
     }, 50);

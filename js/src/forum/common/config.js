@@ -25,6 +25,11 @@ export function pagerJumpFeed() {
   return !!app.forum.attribute('stezkoyPagify.pagerJumpFeed');
 }
 
+export function pagerScrollOffset() {
+  const value = parseInt(app.forum.attribute('stezkoyPagify.pagerScrollOffset'));
+  return Number.isFinite(value) ? value : 80;
+}
+
 export function pagerTrans(key, params) {
   return app.translator.trans('stezkoy-pagify.' + key, params);
 }
