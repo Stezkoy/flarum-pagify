@@ -58,6 +58,7 @@ const pager = (key) => <Pager key={key} state={state} perPage={postListPerPage} 
       trans={pagerTrans} mode={pagerMode()} window={pagerWindow()} counter={pagerCounter()} jump={pagerJumpFeed()}
       scrollOffset={pagerScrollOffset()} buttonSize={pagerButtonSize()} icons={pagerIcons()}
       mobileCompact={mobileCompact()} mobileSmall={mobileSmall()}
+      mobileButtonSize={mobileButtonSize()}
       mobileHideJump={mobileHideJump()} mobileHideCounter={mobileHideCounter()} />;
     if (position === 'under' || position === 'both') vdom.children.push(pager('pagify-postlist-pager-bottom'));
     if (position === 'above' || position === 'both') vdom.children.unshift(pager('pagify-postlist-pager-top'));

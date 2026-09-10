@@ -2,6 +2,7 @@
 
 namespace Stezkoy\Pagify\Middleware;
 
+use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -22,7 +23,11 @@ class ConvertPostStreamNear implements MiddlewareInterface
 
     public function process(Request $request, Handler $handler): Response
     {
+        // Only server-side preloads are rewritten: the browser's own
+        // loadNearNumber sends page[near] without page[limit], and external
+        // clients are free to fetch any window they ask for.
         if ($request->getMethod() === 'GET'
+            && RequestUtil::isInternal($request)
             && $this->settings->get('stezkoy-pagify.enablePostStream')
             && preg_match('#/posts/?$#', $request->getUri()->getPath())
         ) {
@@ -32,7 +37,7 @@ class ConvertPostStreamNear implements MiddlewareInterface
                 && is_numeric($params['page']['near'])
             ) {
                 $near = (int) $params['page']['near'];
-                $perPage = (int) ($this->settings->get('stezkoy-pagify.postsPerPage') ?: 20);
+                $perPage = min(50, max(1, (int) ($this->settings->get('stezkoy-pagify.postsPerPage') ?: 20)));
 
                 if ($near > 0) {
                     $params['page']['offset'] = intdiv($near - 1, $perPage) * $perPage;

@@ -9,6 +9,8 @@ const POST_STREAM = 'flarum/forum/components/PostStream';
 export default function patchPostStream() {
   override(POST_STREAM, 'loadPostsIfNeeded', function (original, ...args) {
     if (!streamEnabled()) return original(...args);
+
+    return Promise.resolve();
   });
 
   override(POST_STREAM, 'view', function (original, vnode) {

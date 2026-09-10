@@ -2,6 +2,7 @@
 
 namespace Stezkoy\Pagify\Middleware;
 
+use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -21,10 +22,13 @@ class NormalizeListLimit implements MiddlewareInterface
 
     public function process(Request $request, Handler $handler): Response
     {
+        // Only server-side preloads are rewritten; external API clients keep
+        // core's own defaults whenever they omit a page size.
         if ($request->getMethod() === 'GET'
+            && RequestUtil::isInternal($request)
             && preg_match('#/discussions/?$#', $request->getUri()->getPath())
         ) {
-            $perPage = (int) ($this->settings->get('stezkoy-pagify.perPage') ?: 20);
+            $perPage = min(50, max(1, (int) ($this->settings->get('stezkoy-pagify.perPage') ?: 20)));
 
             $params = $request->getQueryParams();
 

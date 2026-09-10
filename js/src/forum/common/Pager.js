@@ -114,8 +114,8 @@ export default class Pager extends Component {
 
   renderPages(current, totalPages, windowSize, compact) {
     const pages = compact
-      ? this.pageList(current, totalPages, windowSize)
-      : this.compactPageList(current, totalPages, windowSize);
+      ? this.windowPageList(current, totalPages, windowSize)
+      : this.fullPageList(current, totalPages, windowSize);
 
     const items = [
       this.navItem('first', 1, current === 1, 'forum.list.first'),
@@ -212,7 +212,8 @@ export default class Pager extends Component {
     return total != null ? parseInt(total, 10) : null;
   }
 
-  pageList(current, totalPages, windowSize) {
+  // The center window only — compact mode.
+  windowPageList(current, totalPages, windowSize) {
     const pages = [];
     const left = Math.max(1, current - windowSize);
     const right = Math.min(totalPages, current + windowSize);
@@ -222,7 +223,8 @@ export default class Pager extends Component {
     return pages;
   }
 
-  compactPageList(current, totalPages, windowSize) {
+  // First page, ellipsis, center window, ellipsis, last page — full mode.
+  fullPageList(current, totalPages, windowSize) {
     const items = [];
     const left = Math.max(2, current - windowSize);
     const right = Math.min(totalPages - 1, current + windowSize);
