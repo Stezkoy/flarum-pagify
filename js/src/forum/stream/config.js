@@ -1,3 +1,5 @@
+import app from 'flarum/forum/app';
+
 export function streamEnabled() {
   return !!app.forum.attribute('stezkoyPagify.enablePostStream');
 }
