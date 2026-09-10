@@ -1,6 +1,6 @@
 {
     "name": "flarum-pagify",
-    "version": "0.1.0",
+    "version": "1.0.5",
     "private": true,
     "scripts": {
         "dev": "webpack --mode development --watch",
