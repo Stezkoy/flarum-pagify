@@ -11,6 +11,7 @@
         "jsxFragmentFactory": "Fragment",
         "allowJs": true,
         "checkJs": true,
+        "skipLibCheck": true,
         "strict": false
     },
     "include": ["src/**/*"]

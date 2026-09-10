@@ -10,13 +10,11 @@ export default function overrideDiscussionPage() {
   patchPostStream();
 
   override(DiscussionPage.prototype, 'oninit', function (original, vnode) {
-    // Core v2 still reads PostStreamState.loadCount (loadNearIndex/loadIndex
-    // centre the initial window on it) — this sizes deep-link windows when the
-    // paginated stream is active. goToPage() overrides the window explicitly,
-    // so this mainly tunes the first non-paginated load.
-    if (streamEnabled()) {
-      PostStreamState.loadCount = postsPerPage();
-    }
+    // Core v2 has no per-instance page size: PostStreamState.loadCount is the
+    // static that loadNearIndex/loadIndex/loadPrevPage read to size the window,
+    // so it must be set here. Assigning it from streamEnabled() in every
+    // oninit also resets any stale value once pagination is switched off.
+    PostStreamState.loadCount = streamEnabled() ? postsPerPage() : 20;
     return original(vnode);
   });
 

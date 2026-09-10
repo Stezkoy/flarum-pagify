@@ -16,10 +16,16 @@ export default function goToPage(stream, page, perPage, noAnimation = false, scr
   s.animateScroll = !noAnimation;
   s.index = anchor;
 
-  const promise = s.loadRange(start, end).then((posts) => {
-    s.show(posts);
-    m.redraw();
-  });
+  const promise = s.loadRange(start, end)
+    .then((posts) => {
+      s.show(posts);
+      m.redraw();
+    })
+    .catch(() => {
+      s.paused = false;
+      s.needsScroll = false;
+      m.redraw();
+    });
 
   s.loadPromise = promise;
 

@@ -8,7 +8,9 @@
         "analyze": "webpack --mode production --json > analysis.json"
     },
 "devDependencies": {
+    "flarum-tsconfig": "^2.0.0",
     "flarum-webpack-config": "^3.0.4",
+    "typescript": "^5",
     "webpack": "^5",
     "webpack-cli": "^7.2.2"
   }
