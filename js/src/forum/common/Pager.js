@@ -13,8 +13,6 @@ export const PAGER_ICON_DEFAULTS = {
 export default class Pager extends Component {
   view() {
     const state = this.attrs.state;
-    const trans = this.attrs.trans;
-    const icons = this.attrs.icons || {};
     const mode = this.attrs.mode || 'full';
     const windowSize = Math.max(1, parseInt(this.attrs.window, 10) || 3);
     const shownMode = this.attrs.mobileCompact && isPhone() ? 'mini' : mode;
@@ -24,122 +22,146 @@ export default class Pager extends Component {
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const current = Math.min(totalPages, state.getLocation().page || 1);
 
-    const classes = [
+    let items;
+
+    if (shownMode === 'mini') items = this.renderMini(current, totalPages);
+    else if (shownMode === 'core') items = this.renderCore(current, totalPages);
+    else items = this.renderPages(current, totalPages, windowSize, shownMode === 'compact');
+
+    if (this.attrs.jump && shownMode !== 'core') {
+      items = items.concat(this.renderJump(state, totalPages));
+    }
+
+    const counter = shownMode !== 'mini' && shownMode !== 'core' && this.attrs.counter
+      ? <span className="PagifyPager-counter">{this.attrs.trans('forum.list.pageOf', { page: current, total: totalPages })}</span>
+      : null;
+
+    return (
+      <nav className={this.rootClass()} style={this.rootStyle()} aria-label={this.attrs.ariaLabel || this.attrs.trans('forum.list.aria_label')}>
+        {items}
+        {counter}
+      </nav>
+    );
+  }
+
+  rootClass() {
+    return [
       'PagifyPager',
       this.attrs.mobileSmall ? 'pagifySmall' : '',
       this.attrs.mobileHideJump ? 'pagifyHideJump' : '',
       this.attrs.mobileHideCounter ? 'pagifyHideCounter' : '',
     ].filter(Boolean).join(' ');
+  }
 
-    const styleProps = [
-      '--pagify-size:' + (parseInt(this.attrs.buttonSize, 10) || 36) + 'px',
-    ];
+  rootStyle() {
+    const props = ['--pagify-size:' + (parseInt(this.attrs.buttonSize, 10) || 36) + 'px'];
 
     if (this.attrs.mobileSmall) {
-      styleProps.push('--pagify-mobile-size:' + (parseInt(this.attrs.mobileButtonSize, 10) || 22) + 'px');
+      props.push('--pagify-mobile-size:' + (parseInt(this.attrs.mobileButtonSize, 10) || 22) + 'px');
     }
 
-    const items = [];
+    return props.join(';');
+  }
 
-    if (shownMode === 'mini') {
-      items.push(this.navItem('prev', current - 1, current === 1, 'forum.list.previous'));
-      items.push(<span className="PagifyPager-current">{current} / {totalPages}</span>);
-      items.push(this.navItem('next', current + 1, current === totalPages, 'forum.list.next'));
-    } else if (shownMode === 'core') {
-      items.push(this.navItem('first', 1, current === 1, 'forum.list.first'));
-      items.push(this.navItem('prev', current - 1, current === 1, 'forum.list.previous'));
-      items.push(
-        <span className="PagifyPager-core">
-          {trans('forum.list.pageInput', {
-            input: (
-              <input
-                className="FormControl PagifyPager-numInput"
-                type="text"
-                inputmode="numeric"
-                pattern="[0-9]*"
-                value={String(current)}
-                maxLength={String(totalPages).length}
-                aria-label={trans('forum.list.jump')}
-                autocomplete="off"
-                onchange={(event) => {
-                  const value = parseInt(event.target.value, 10);
+  renderMini(current, totalPages) {
+    return [
+      this.navItem('prev', current - 1, current === 1, 'forum.list.previous'),
+      <span className="PagifyPager-current">{current} / {totalPages}</span>,
+      this.navItem('next', current + 1, current === totalPages, 'forum.list.next'),
+    ];
+  }
 
-                  if (!Number.isFinite(value)) {
-                    event.target.value = String(current);
-                    return;
-                  }
+  renderCore(current, totalPages) {
+    const trans = this.attrs.trans;
 
-                  const target = Math.min(Math.max(1, value), totalPages);
-                  event.target.value = String(target);
+    return [
+      this.navItem('first', 1, current === 1, 'forum.list.first'),
+      this.navItem('prev', current - 1, current === 1, 'forum.list.previous'),
+      <span className="PagifyPager-core">
+        {trans('forum.list.pageInput', {
+          input: (
+            <input
+              className="FormControl PagifyPager-numInput"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              value={String(current)}
+              maxLength={String(totalPages).length}
+              aria-label={trans('forum.list.jump')}
+              autocomplete="off"
+              onchange={(event) => {
+                const value = parseInt(event.target.value, 10);
 
-                  if (target !== current) this.goto(state, target);
-                }}
-              />
-            ),
-            total: totalPages,
-          })}
-        </span>
-      );
-      items.push(this.navItem('next', current + 1, current === totalPages, 'forum.list.next'));
-      items.push(this.navItem('last', totalPages, current === totalPages, 'forum.list.last'));
-    } else {
-      const pages = shownMode === 'compact'
-        ? this.pageList(current, totalPages, windowSize)
-        : this.compactPageList(current, totalPages, windowSize);
+                if (!Number.isFinite(value)) {
+                  event.target.value = String(current);
+                  return;
+                }
 
-      items.push(this.navItem('first', 1, current === 1, 'forum.list.first'));
-      items.push(this.navItem('prev', current - 1, current === 1, 'forum.list.previous'));
+                const target = Math.min(Math.max(1, value), totalPages);
+                event.target.value = String(target);
 
-      for (const page of pages) {
-        items.push(page === '…' ? <span className="PagifyPager-ellipsis">…</span> : this.pageItem(page, current));
-      }
+                if (target !== current) this.goto(this.attrs.state, target);
+              }}
+            />
+          ),
+          total: totalPages,
+        })}
+      </span>,
+      this.navItem('next', current + 1, current === totalPages, 'forum.list.next'),
+      this.navItem('last', totalPages, current === totalPages, 'forum.list.last'),
+    ];
+  }
 
-      items.push(this.navItem('next', current + 1, current === totalPages, 'forum.list.next'));
-      items.push(this.navItem('last', totalPages, current === totalPages, 'forum.list.last'));
+  renderPages(current, totalPages, windowSize, compact) {
+    const pages = compact
+      ? this.pageList(current, totalPages, windowSize)
+      : this.compactPageList(current, totalPages, windowSize);
+
+    const items = [
+      this.navItem('first', 1, current === 1, 'forum.list.first'),
+      this.navItem('prev', current - 1, current === 1, 'forum.list.previous'),
+    ];
+
+    for (const page of pages) {
+      items.push(page === '…' ? <span className="PagifyPager-ellipsis">…</span> : this.pageItem(page, current));
     }
 
-    if (this.attrs.jump && shownMode !== 'core') {
-      items.push(
-        <span className="PagifyPager-jump">
-          <input
-            className="FormControl PagifyPager-numInput"
-            type="text"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            maxLength={String(totalPages).length + 1}
-            placeholder={String(current)}
-            aria-label={trans('forum.list.jump')}
-            autocomplete="off"
-            onkeydown={(event) => {
-              if (event.key === 'Enter') {
-                event.redraw = false;
-                this.jump(state, event.target.value);
-              }
-            }}
-          />
-          <Button
-            title={trans('forum.list.jump')}
-            aria-label={trans('forum.list.jump')}
-            icon={icons.jump || PAGER_ICON_DEFAULTS.jump}
-            className="Button Button--icon PagifyPager-jumpGo"
-            onclick={() => this.onNavClick('jump', () => this.jump(state, this.element.querySelector('input')?.value))}
-          />
-        </span>
-      );
-    }
+    items.push(this.navItem('next', current + 1, current === totalPages, 'forum.list.next'));
+    items.push(this.navItem('last', totalPages, current === totalPages, 'forum.list.last'));
 
-    return (
-      <nav
-        className={classes}
-        style={styleProps.join(';')}
-        aria-label={this.attrs.ariaLabel || trans('forum.list.aria_label')}
-      >
-        {items}
-        {shownMode !== 'mini' && shownMode !== 'core' && this.attrs.counter ? (
-          <span className="PagifyPager-counter">{trans('forum.list.pageOf', { page: current, total: totalPages })}</span>
-        ) : null}
-      </nav>
-    );
+    return items;
+  }
+
+  renderJump(state, totalPages) {
+    const trans = this.attrs.trans;
+
+    return [
+      <span className="PagifyPager-jump">
+        <input
+          className="FormControl PagifyPager-numInput"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxLength={String(totalPages).length + 1}
+          placeholder={String(state.getLocation().page || 1)}
+          aria-label={trans('forum.list.jump')}
+          autocomplete="off"
+          onkeydown={(event) => {
+            if (event.key === 'Enter') {
+              event.redraw = false;
+              this.jump(state, event.target.value);
+            }
+          }}
+        />
+        <Button
+          title={trans('forum.list.jump')}
+          aria-label={trans('forum.list.jump')}
+          icon={(this.attrs.icons || {}).jump || PAGER_ICON_DEFAULTS.jump}
+          className="Button Button--icon PagifyPager-jumpGo"
+          onclick={() => this.onNavClick('jump', () => this.jump(state, this.element.querySelector('input')?.value))}
+        />
+      </span>,
+    ];
   }
 
   navItem(key, page, disabled, labelKey) {
@@ -155,15 +177,6 @@ export default class Pager extends Component {
     );
   }
 
-  onNavClick(key, fallback) {
-    if (this.attrs.onIconClick) {
-      this.attrs.onIconClick(key);
-      return;
-    }
-
-    fallback();
-  }
-
   pageItem(page, current) {
     return (
       <Button
@@ -176,6 +189,15 @@ export default class Pager extends Component {
         {page}
       </Button>
     );
+  }
+
+  onNavClick(key, fallback) {
+    if (this.attrs.onIconClick) {
+      this.attrs.onIconClick(key);
+      return;
+    }
+
+    fallback();
   }
 
   fallbackPerPage() {

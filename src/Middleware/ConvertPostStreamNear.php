@@ -34,7 +34,7 @@ class ConvertPostStreamNear implements MiddlewareInterface
                 $near = (int) $params['page']['near'];
                 $perPage = (int) ($this->settings->get('stezkoy-pagify.postsPerPage') ?: 20);
 
-                if ($near > 0 && $perPage !== 20) {
+                if ($near > 0) {
                     $params['page']['offset'] = intdiv($near - 1, $perPage) * $perPage;
                     $params['page']['limit'] = $perPage;
                     $request = $request->withQueryParams($params);

@@ -102,64 +102,64 @@ export default class PagifySettingsPage extends ExtensionPage {
   _pagerSection() {
     return this._section('admin.settings.pager_heading', [
       this._toggle(PREFIX + '.urlPage', 'admin.settings.urlPage', 'admin.settings.urlPage-Help'),
-      m('.Form-group', [
-        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerMode')),
-        m('select.FormControl', {
-          value: this.setting(PREFIX + '.pagerMode')(),
-          onchange: (e) => {
-            this.setting(PREFIX + '.pagerMode')(e.target.value);
-            m.redraw();
-          },
-        }, [
-          m('option', { value: 'full' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_full')),
-          m('option', { value: 'compact' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_compact')),
-          m('option', { value: 'core' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_core')),
-          m('option', { value: 'mini' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_mini')),
-        ]),
-        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerMode-Help')),
-      ]),
-      m('.Form-group', [
-        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerWindow')),
-        m('input.FormControl', {
-          type: 'number',
-          min: 1,
-          max: 10,
-          bidi: this.setting(PREFIX + '.pagerWindow'),
-        }),
-        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerWindow-Help')),
-      ]),
-      m('.Form-group', [
-        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerButtonSize')),
-        m('input.FormControl', {
-          type: 'number',
-          min: 24,
-          max: 72,
-          bidi: this.setting(PREFIX + '.pagerButtonSize'),
-        }),
-        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerButtonSize-Help')),
-      ]),
+      this._pagerModeGroup(),
+      this._numberField('admin.settings.pagerWindow', PREFIX + '.pagerWindow', 1, 10),
+      this._numberField('admin.settings.pagerButtonSize', PREFIX + '.pagerButtonSize', 24, 72),
       this._toggle(PREFIX + '.pagerCounter', 'admin.settings.pagerCounter', 'admin.settings.pagerCounter-Help'),
+      ...this._pagerJumpToggles(),
+      this._numberField('admin.settings.pagerScrollOffset', PREFIX + '.pagerScrollOffset', -500, 500),
+      this._pagerPreviewGroup(),
+    ]);
+  }
+
+  _pagerModeGroup() {
+    return m('.Form-group', [
+      m('label', app.translator.trans(PREFIX + '.admin.settings.pagerMode')),
+      m('select.FormControl', {
+        value: this.setting(PREFIX + '.pagerMode')(),
+        onchange: (e) => {
+          this.setting(PREFIX + '.pagerMode')(e.target.value);
+          m.redraw();
+        },
+      }, [
+        m('option', { value: 'full' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_full')),
+        m('option', { value: 'compact' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_compact')),
+        m('option', { value: 'core' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_core')),
+        m('option', { value: 'mini' }, app.translator.trans(PREFIX + '.admin.settings.pager_mode_mini')),
+      ]),
+      m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerMode-Help')),
+    ]);
+  }
+
+  _numberField(labelKey, settingKey, min, max) {
+    return m('.Form-group', [
+      m('label', app.translator.trans(PREFIX + '.' + labelKey)),
+      m('input.FormControl', {
+        type: 'number',
+        min,
+        max,
+        bidi: this.setting(settingKey),
+      }),
+      m('p.helpText', app.translator.trans(PREFIX + '.' + labelKey + '-Help')),
+    ]);
+  }
+
+  _pagerJumpToggles() {
+    return [
       this._toggle(PREFIX + '.pagerJumpList', 'admin.settings.pagerJumpList', 'admin.settings.pagerJumpList-Help'),
       this._toggle(PREFIX + '.pagerJumpStream', 'admin.settings.pagerJumpStream', 'admin.settings.pagerJumpStream-Help'),
       this._toggle(PREFIX + '.pagerJumpFeed', 'admin.settings.pagerJumpFeed', 'admin.settings.pagerJumpFeed-Help'),
-      m('.Form-group', [
-        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerScrollOffset')),
-        m('input.FormControl', {
-          type: 'number',
-          min: -500,
-          max: 500,
-          bidi: this.setting(PREFIX + '.pagerScrollOffset'),
-        }),
-        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerScrollOffset-Help')),
+    ];
+  }
+
+  _pagerPreviewGroup() {
+    return m('.Form-group', [
+      m('label', app.translator.trans(PREFIX + '.admin.settings.pagerPreview')),
+      m('.PagifySettings-preview', [
+        this._pagerPreview(),
+        this._iconEditor(),
       ]),
-      m('.Form-group', [
-        m('label', app.translator.trans(PREFIX + '.admin.settings.pagerPreview')),
-        m('.PagifySettings-preview', [
-          this._pagerPreview(),
-          this._iconEditor(),
-        ]),
-        m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerPreview-Help')),
-      ]),
+      m('p.helpText', app.translator.trans(PREFIX + '.admin.settings.pagerPreview-Help')),
     ]);
   }
 

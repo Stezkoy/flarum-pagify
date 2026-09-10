@@ -43,6 +43,7 @@ export default class PostPaginator extends Component {
         buttonSize={pagerButtonSize()}
         mobileCompact={mobileCompact()}
         mobileSmall={mobileSmall()}
+        mobileButtonSize={mobileButtonSize()}
         mobileHideJump={mobileHideJump()}
         mobileHideCounter={mobileHideCounter()}
       />

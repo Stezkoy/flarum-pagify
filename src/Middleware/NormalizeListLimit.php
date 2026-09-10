@@ -26,13 +26,11 @@ class NormalizeListLimit implements MiddlewareInterface
         ) {
             $perPage = (int) ($this->settings->get('stezkoy-pagify.perPage') ?: 20);
 
-            if ($perPage !== 20) {
-                $params = $request->getQueryParams();
+            $params = $request->getQueryParams();
 
-                if (! isset($params['page']['limit'])) {
-                    $params['page']['limit'] = $perPage;
-                    $request = $request->withQueryParams($params);
-                }
+            if (! isset($params['page']['limit'])) {
+                $params['page']['limit'] = $perPage;
+                $request = $request->withQueryParams($params);
             }
         }
 
