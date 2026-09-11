@@ -24,6 +24,15 @@ export default function overrideDiscussionList() {
       const requested = readPageParam();
       if (requested > 1) this.location = { page: requested };
 
+      // The preloaded doc bypasses core's response parsing — apply the same
+      // meta extraction core does in PaginatedListState.parseResults.
+      const meta = preloaded && preloaded.payload && preloaded.payload.meta;
+      const usedTotal = meta && meta.page ? meta.page.total : null;
+
+      if (usedTotal && this.totalItems !== parseInt(usedTotal, 10)) {
+        this.totalItems = parseInt(usedTotal, 10);
+      }
+
       return Promise.resolve(preloaded);
     }
 
