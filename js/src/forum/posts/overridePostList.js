@@ -6,7 +6,8 @@ import classList from 'flarum/common/utils/classList';
 
 import Pager from '../common/Pager';
 import { postListEnabled, postListPerPage, postListPosition } from './config';
-import { pagerMode, pagerWindow, pagerCounter, pagerJumpFeed, pagerScrollOffset, pagerButtonSize, pagerIcons, mobileCompact, mobileSmall, mobileButtonSize, mobileHideJump, mobileHideCounter, pagerTrans, urlPage, readPageParam, setActiveList } from '../common/config';
+import { pagerMode, pagerWindow, pagerCounter, pagerJumpFeed, pagerScrollOffset, pagerButtonSize, pagerIcons, mobileCompact, mobileSmall, mobileButtonSize, mobileHideJump, mobileHideCounter, pagerTrans, urlPage, readPageParam } from '../common/configApp';
+import { setActiveList } from '../common/config';
 
 const POST_LIST = 'flarum/forum/components/PostList';
 const POST_LIST_STATE = 'flarum/forum/states/PostListState';
@@ -55,7 +56,7 @@ export default function overridePostList() {
 
     const position = postListPosition();
 const pager = (key) => <Pager key={key} state={state} perPage={postListPerPage} scrollSelector=".PostList"
-      trans={pagerTrans} mode={pagerMode()} window={pagerWindow()} counter={pagerCounter()} jump={pagerJumpFeed()}
+      trans={pagerTrans} updateUrl={urlPage()} mode={pagerMode()} window={pagerWindow()} counter={pagerCounter()} jump={pagerJumpFeed()}
       scrollOffset={pagerScrollOffset()} buttonSize={pagerButtonSize()} icons={pagerIcons()}
       mobileCompact={mobileCompact()} mobileSmall={mobileSmall()}
       mobileButtonSize={mobileButtonSize()}

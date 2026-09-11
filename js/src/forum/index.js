@@ -5,7 +5,8 @@ import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import overrideDiscussionList from './list/overrideDiscussionList';
 import overrideDiscussionPage from './stream/overrideDiscussionPage';
 import overridePostList from './posts/overridePostList';
-import { urlPage, getActiveList, readPageParam } from './common/config';
+import { getActiveList } from './common/config';
+import { urlPage, readPageParam } from './common/configApp';
 import { scrollListTop } from './common/Pager';
 
 app.initializers.add('stezkoy-pagify', () => {

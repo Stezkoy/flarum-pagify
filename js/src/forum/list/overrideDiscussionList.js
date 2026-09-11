@@ -9,7 +9,8 @@ import classList from 'flarum/common/utils/classList';
 
 import Pager from '../common/Pager';
 import { listEnabled, perPage, position } from './config';
-import { pagerMode, pagerWindow, pagerCounter, pagerJumpList, pagerScrollOffset, pagerButtonSize, pagerIcons, mobileCompact, mobileSmall, mobileButtonSize, mobileHideJump, mobileHideCounter, pagerTrans, urlPage, readPageParam, setActiveList } from '../common/config';
+import { pagerMode, pagerWindow, pagerCounter, pagerJumpList, pagerScrollOffset, pagerButtonSize, pagerIcons, mobileCompact, mobileSmall, mobileButtonSize, mobileHideJump, mobileHideCounter, pagerTrans, urlPage, readPageParam } from '../common/configApp';
+import { setActiveList } from '../common/config';
 
 export default function overrideDiscussionList() {
   override(DiscussionListState.prototype, 'loadPage', function (original, page) {
@@ -90,6 +91,7 @@ export default function overrideDiscussionList() {
       perPage,
       scrollSelector: '.DiscussionList',
       trans: pagerTrans,
+      updateUrl: urlPage(),
       mode: pagerMode(),
       window: pagerWindow(),
       counter: pagerCounter(),

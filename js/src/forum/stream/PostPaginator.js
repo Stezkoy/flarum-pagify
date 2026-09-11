@@ -3,7 +3,7 @@ import Component from 'flarum/common/Component';
 import goToPage from './goToPage';
 import Pager from '../common/Pager';
 import { postsPerPage, streamEnabled } from './config';
-import { pagerMode, pagerWindow, pagerCounter, pagerJumpStream, pagerScrollOffset, pagerButtonSize, pagerIcons, mobileCompact, mobileSmall, mobileButtonSize, mobileHideJump, mobileHideCounter, pagerTrans } from '../common/config';
+import { pagerMode, pagerWindow, pagerCounter, pagerJumpStream, pagerScrollOffset, pagerButtonSize, pagerIcons, mobileCompact, mobileSmall, mobileButtonSize, mobileHideJump, mobileHideCounter, pagerTrans, urlPage } from '../common/configApp';
 
 export default class PostPaginator extends Component {
   view() {
@@ -32,6 +32,7 @@ export default class PostPaginator extends Component {
         state={state}
         perPage={() => perPage}
         trans={pagerTrans}
+        updateUrl={urlPage()}
         mode={pagerMode()}
         window={pagerWindow()}
         counter={pagerCounter()}

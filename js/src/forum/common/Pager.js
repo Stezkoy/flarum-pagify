@@ -1,6 +1,6 @@
 import Button from 'flarum/common/components/Button';
 import Component from 'flarum/common/Component';
-import { isPhone, urlPage, setPageParam } from './config';
+import { isPhone, setPageParam } from './config';
 
 export const PAGER_ICON_DEFAULTS = {
   first: 'fas fa-step-backward',
@@ -18,7 +18,7 @@ export default class Pager extends Component {
     const shownMode = this.attrs.mobileCompact && isPhone() ? 'mini' : mode;
 
     const pageSize = state.pageSize || this.fallbackPerPage();
-    const total = state.totalItems ?? this.payloadTotal(state) ?? 0;
+    const total = state.totalItems ?? 0;
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const current = Math.min(totalPages, state.getLocation().page || 1);
 
@@ -204,14 +204,6 @@ export default class Pager extends Component {
     return typeof this.attrs.perPage === 'function' ? this.attrs.perPage() : 20;
   }
 
-  payloadTotal(state) {
-    const firstPage = state.getPages()[0];
-    const meta = firstPage && firstPage.items && firstPage.items.payload ? firstPage.items.payload.meta : null;
-    const total = meta && meta.page ? meta.page.total : null;
-
-    return total != null ? parseInt(total, 10) : null;
-  }
-
   // The center window only — compact mode.
   windowPageList(current, totalPages, windowSize) {
     const pages = [];
@@ -240,14 +232,14 @@ export default class Pager extends Component {
 
   goto(state, page) {
     const pageSize = state.pageSize || this.fallbackPerPage();
-    const total = state.totalItems ?? this.payloadTotal(state) ?? 0;
+    const total = state.totalItems ?? 0;
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const target = Math.min(Math.max(1, page), totalPages);
 
     if (target === (state.getLocation().page || 1)) return;
 
     state.goto(target).then(() => {
-      if (urlPage()) setPageParam(target);
+      if (this.attrs.updateUrl) setPageParam(target);
       this.scrollToTop();
     });
   }
@@ -269,17 +261,21 @@ export default class Pager extends Component {
 }
 
 export function scrollListTop(scrollSelector, extraOffset) {
-  setTimeout(() => {
-    const list = document.querySelector(scrollSelector || '.DiscussionList')
-      || document.querySelector('.Page-content');
-    const header = document.getElementById('header');
-    const offsetY = header ? header.clientHeight : 0;
-    const parsed = parseInt(extraOffset, 10);
-    const offset = Number.isFinite(parsed) ? parsed : 80;
+  // Two frames: one completes the render that triggered this, the second
+  // guarantees a paint — so layout metrics are final when measured.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const list = document.querySelector(scrollSelector || '.DiscussionList')
+        || document.querySelector('.Page-content');
+      const header = document.getElementById('header');
+      const offsetY = header ? header.clientHeight : 0;
+      const parsed = parseInt(extraOffset, 10);
+      const offset = Number.isFinite(parsed) ? parsed : 80;
 
-    if (list) {
-      const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY - offset;
-      window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-    }
-  }, 50);
+      if (list) {
+        const targetPosition = list.getBoundingClientRect().top + window.scrollY - offsetY - offset;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+      }
+    });
+  });
 }
